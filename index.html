@@ -3,210 +3,366 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Чайная Лавочка — касса v5</title>
+<title>Чайная Лавочка — касса</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f3eee7;color:#2d2722;font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-header{background:#332721;color:#fff;padding:14px 16px;font-size:19px;font-weight:800;position:sticky;top:0;z-index:20}header span{color:#e5b75c}
-nav{display:flex;gap:6px;padding:8px;background:#fff;overflow:auto;position:sticky;top:52px;z-index:19;border-bottom:1px solid #ddd}nav button{border:0;border-radius:10px;padding:10px 13px;background:#eee5da;font-weight:700;white-space:nowrap}nav button.active{background:#a52f2b;color:#fff}
-main{max-width:1200px;margin:auto;padding:12px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}.card{background:#fffdf9;border:1px solid #dfd3c5;border-radius:15px;padding:14px;margin-bottom:12px}
-h2{margin:0 0 12px;font-size:20px}h3{margin:15px 0 8px}label{display:block;font-size:13px;font-weight:700;margin:8px 0 4px}
-input,select{width:100%;padding:10px;border:1px solid #cec1b1;border-radius:9px;background:#fff;font-size:16px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.btn{border:0;border-radius:9px;padding:9px 11px;font-weight:700;background:#eee5da;cursor:pointer}.primary{background:#a52f2b;color:#fff}.green{background:#2b8a4b;color:#fff}.danger{background:#b43b35;color:#fff}
-.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.tile{border:1px solid #d9cdbf;background:#fff;border-radius:10px;padding:11px;text-align:left;min-height:65px;font-weight:700;cursor:pointer}.tile small{display:block;color:#a52f2b;margin-top:5px}
-.muted{color:#766c64;font-size:13px}.hint{background:#faf0df;border-radius:10px;padding:10px;margin:8px 0;font-size:13px}.cartrow{display:grid;grid-template-columns:1fr auto;gap:8px;border-bottom:1px solid #ddd5cb;padding:10px 0}.total{font-size:28px;font-weight:900;margin:15px 0}
-table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px;border-bottom:1px solid #ddd5cb;text-align:left;vertical-align:top}th{background:#eee7dd}.scroll{overflow:auto;max-height:65vh}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#fff;border:1px solid #ddd1c2;border-radius:10px;padding:12px}.stat b{display:block;font-size:20px;margin-top:5px}
-.hidden{display:none}.bad{color:#b3261e;font-weight:800}.actions{display:flex;gap:5px;flex-wrap:wrap}.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:15px;z-index:50}.modalbox{background:#fffdf9;color:#2d2722;border-radius:15px;padding:18px;width:min(600px,100%);max-height:90vh;overflow:auto;min-height:120px;box-shadow:0 10px 40px #0005}.modalbox:empty{display:none}
+*{box-sizing:border-box}
+body{margin:0;background:#f3eee7;color:#2d2722;font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+header{background:#332721;color:#fff;padding:14px 16px;font-size:19px;font-weight:800;position:sticky;top:0;z-index:20}
+header span{color:#e5b75c}
+nav{display:flex;gap:6px;padding:8px;background:#fff;overflow:auto;position:sticky;top:52px;z-index:19;border-bottom:1px solid #ddd}
+nav button{border:0;border-radius:10px;padding:10px 13px;background:#eee5da;font-weight:700;white-space:nowrap}
+nav button.active{background:#a52f2b;color:#fff}
+main{max-width:1200px;margin:auto;padding:12px}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}
+.card{background:#fffdf9;border:1px solid #dfd3c5;border-radius:15px;padding:14px;margin-bottom:12px}
+h2{margin:0 0 12px;font-size:20px}
+label{display:block;font-size:13px;font-weight:700;margin:8px 0 4px}
+input,select{width:100%;padding:10px;border:1px solid #cec1b1;border-radius:9px;background:#fff;font-size:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.btn{border:0;border-radius:9px;padding:10px 12px;font-weight:700;background:#eee5da;cursor:pointer}
+.primary{background:#a52f2b;color:#fff}.green{background:#2b8a4b;color:#fff}.danger{background:#b43b35;color:#fff}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{border:1px solid #d9cdbf;background:#fff;border-radius:10px;padding:11px;text-align:left;min-height:65px;font-weight:700;cursor:pointer}
+.tile small{display:block;color:#a52f2b;margin-top:5px}
+.muted{color:#766c64;font-size:13px}
+.hint{background:#faf0df;border-radius:10px;padding:10px;margin:8px 0;font-size:13px}
+.cartrow{display:grid;grid-template-columns:1fr auto;gap:8px;border-bottom:1px solid #ddd5cb;padding:9px 0}
+.total{font-size:28px;font-weight:900;margin:15px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px;border-bottom:1px solid #ddd5cb;text-align:left;vertical-align:top}
+th{background:#eee7dd}
+.scroll{overflow:auto;max-height:65vh}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:#fff;border:1px solid #ddd1c2;border-radius:10px;padding:12px}
+.stat b{display:block;font-size:20px;margin-top:5px}
+.hidden{display:none}
+.bad{color:#b3261e;font-weight:800}
+.ok{color:#267a42;font-weight:800}
 @media(max-width:760px){.grid{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.row3{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <header>🐒 Чайная <span>Лавочка</span> — касса</header>
+
 <nav>
 <button class="active" onclick="tab('sales',this)">🧾 Продажи</button>
 <button onclick="tab('base',this)">📦 База</button>
 <button onclick="tab('receive',this)">📥 Приёмка</button>
 <button onclick="tab('report',this)">📊 Отчёт</button>
 <button onclick="tab('reference',this)">⚙️ Справочник</button>
+<button onclick="tab('instruction',this)">❓ Инструкция</button>
 </nav>
+
 <main>
+
 <section id="sales">
-<div class="grid"><div>
-<div class="card"><h2>Услуги</h2><div id="serviceTiles" class="tiles"></div></div>
-<div class="card"><h2>Выберите чай</h2><div id="teaTiles" class="tiles"></div></div>
-<div class="card"><h2>Добавить чай вручную</h2>
-<label>Чай</label><select id="productSelect"></select>
-<div class="row3"><div><label>Граммы</label><input id="productQty" type="number" step=".01" min=".01" value="10"></div><div><label>Скидка %</label><input id="productDiscount" type="number" step=".01" min="0" max="100" value="0"></div><div><label>Наклейки</label><input id="productStickers" type="number" step="1" min="0" value="0"></div></div>
-<button class="btn primary" style="width:100%;margin-top:9px" onclick="addTeaOnly()">＋ Добавить чай</button></div>
-<div class="card"><h2>☕ Кофе</h2><div id="coffeeTiles" class="tiles"></div></div>
-<div class="card"><h2>🎮 VIP</h2><div id="vipTiles" class="tiles"></div></div>
+<div class="grid">
+<div>
+<div class="card">
+<h2>Услуги — быстрый выбор</h2>
+<div id="serviceTiles" class="tiles"></div>
+<div class="hint">
+<b>Как теперь работает смешанная продажа:</b><br>
+Например, пришли 3 человека → нажми «Чай в стаканчике проливом» 3 раза.
+Потом выбери чай и введи 10 г. В чек попадут и 3 услуги, и 10 г чая.
 </div>
-<div class="card"><h2>Текущий чек</h2><div id="check"></div><div class="total">Итого: <span id="total">0</span> ₽</div>
-<button class="btn green" style="width:100%;font-size:17px" onclick="sell()">✓ ПРОДАТЬ</button><button class="btn danger" style="width:100%;margin-top:8px" onclick="clearCheck()">Очистить чек</button></div></div>
+</div>
+
+<div class="card">
+<h2>Добавить чай / товар</h2>
+<label>Товар</label>
+<select id="productSelect"></select>
+<div class="row3">
+<div><label>Количество / граммы</label><input id="productQty" type="number" min=".01" step=".01" value="10"></div>
+<div><label>Скидка %</label><input id="productDiscount" type="number" min="0" max="100" step=".01" value="0"></div>
+<div><label>Наклеек</label><input id="productStickers" type="number" min="0" step="1" value="0"></div>
+</div>
+<button class="btn primary" style="width:100%;margin-top:9px" onclick="addProductLine()">＋ Добавить товар в чек</button>
+</div>
+
+<div class="card">
+<h2>Быстрый выбор чая</h2>
+<div id="teaTiles" class="tiles"></div>
+</div>
+
+<div class="card">
+<h2>Кофе</h2>
+<div id="coffeeTiles" class="tiles"></div>
+</div>
+
+<div class="card">
+<h2>VIP</h2>
+<div id="vipTiles" class="tiles"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Текущий чек</h2>
+<div id="check"></div>
+<div class="total">Итого: <span id="total">0</span> ₽</div>
+<button class="btn green" style="width:100%;font-size:17px" onclick="sell()">✓ ПРОДАТЬ</button>
+<button class="btn danger" style="width:100%;margin-top:8px" onclick="clearCheck()">Очистить чек</button>
+</div>
+</div>
 </section>
 
-<section id="base" class="hidden"><div class="card"><h2>📦 База</h2><button class="btn primary" onclick="openProductModal()">＋ Новый товар</button><div class="scroll" style="margin-top:10px"><table id="baseTable"></table></div></div></section>
+<section id="base" class="hidden">
+<div class="card">
+<h2>📦 База — как в Excel</h2>
+<button class="btn primary" onclick="showNewProduct()">＋ Новый товар</button>
+<div class="scroll" style="margin-top:10px">
+<table id="baseTable"></table>
+</div>
+</div>
 
-<section id="receive" class="hidden"><div class="card"><h2>📥 Приёмка / списание</h2>
-<label>Товар</label><select id="receiveProduct"></select><div class="row3"><div><label>Количество</label><input id="receiveQty" type="number" step=".01"></div><div><label>Себестоимость</label><input id="receiveCost" type="number" step=".01"></div><div><label>Наклейки</label><input id="receiveStickers" type="number" step="1" value="0"></div></div>
-<button class="btn green" style="margin-top:10px" onclick="receiveProduct()">✓ Принять</button><button class="btn danger" style="margin-top:10px" onclick="writeOff()">− Списать</button></div>
-<div class="card"><h2>＋ Новый товар</h2><div class="row2"><div><label>Название</label><input id="rn"></div><div><label>Единица</label><select id="ru"><option>гр</option><option>шт</option></select></div></div>
-<div class="row3"><div><label>Количество</label><input id="rq" type="number" step=".01"></div><div><label>Себестоимость</label><input id="rc" type="number" step=".01"></div><div><label>Цена продажи</label><input id="rp" type="number" step=".01"></div></div>
-<label>Наклейки</label><input id="rs" type="number" step="1" value="0"><button class="btn primary" style="margin-top:10px" onclick="createReceiveProduct()">＋ Создать</button></div></section>
+<div id="newProduct" class="card hidden">
+<h2>Новый товар</h2>
+<div class="row2">
+<div><label>Наименование</label><input id="newName"></div>
+<div><label>Единица</label><select id="newUnit"><option value="гр">гр</option><option value="шт">шт</option></select></div>
+</div>
+<div class="row3">
+<div><label>Цена за гр/шт (руб)</label><input id="newPrice" type="number" step=".01"></div>
+<div><label>В наличии</label><input id="newStock" type="number" step=".01"></div>
+<div><label>Себестоимость</label><input id="newCost" type="number" step=".01"></div>
+</div>
+<label>Наклейки на товар</label><input id="newStickers" type="number" step="1" value="0">
+<button class="btn primary" style="margin-top:10px" onclick="createProduct()">Сохранить</button>
+</div>
+</section>
 
-<section id="report" class="hidden"><div class="card"><h2>📊 Отчёт — чеки</h2><div id="stats" class="stats"></div></div><div class="card"><div id="reportList"></div></div></section>
+<section id="receive" class="hidden">
+<div class="card">
+<h2>📥 Приёмка существующего товара</h2>
+<label>Товар</label><select id="receiveProduct"></select>
+<div class="row3">
+<div><label>Количество</label><input id="receiveQty" type="number" step=".01"></div>
+<div><label>Себестоимость за гр/шт</label><input id="receiveCost" type="number" step=".01"></div>
+<div><label>Наклейки</label><input id="receiveStickers" type="number" step="1" value="0"></div>
+</div>
+<button class="btn green" style="margin-top:10px" onclick="receiveProduct()">✓ Принять товар</button>
+<button class="btn danger" style="margin-top:10px" onclick="writeOff()">− Списать товар</button>
+</div>
 
-<section id="reference" class="hidden"><div class="card"><h2>⚙️ Справочник</h2><div class="scroll"><table id="serviceTable"></table></div>
-<h3>Добавить услугу</h3><div class="row2"><div><label>Название</label><input id="sn"></div><div><label>Цена</label><input id="sp" type="number" step=".01"></div></div>
-<div class="row2"><div><label>Тип расчёта</label><select id="st"><option>вес</option><option>смешанный</option><option>штуки</option><option>аренда</option><option>деньги</option></select></div><div><label>Единица</label><select id="su"><option>гр</option><option>шт</option><option>час</option><option>руб</option></select></div></div>
-<button class="btn primary" style="margin-top:10px" onclick="addService()">＋ Добавить</button></div>
-<div class="card"><h2>☕ Кофе</h2><table id="coffeeTable"></table></div><div class="card"><h2>🎮 VIP</h2><table id="vipTable"></table></div></section>
+<div class="card">
+<h2>＋ Новый товар</h2>
+<label>Название нового товара</label><input id="receiveNewName">
+<div class="row3">
+<div><label>Количество</label><input id="receiveNewQty" type="number" step=".01"></div>
+<div><label>Себестоимость</label><input id="receiveNewCost" type="number" step=".01"></div>
+<div><label>Цена продажи</label><input id="receiveNewPrice" type="number" step=".01"></div>
+</div>
+<label>Наклейки</label><input id="receiveNewStickers" type="number" step="1" value="0">
+<button class="btn primary" style="margin-top:10px" onclick="createReceiveProduct()">＋ Создать новый товар</button>
+</div>
+</section>
+
+<section id="report" class="hidden">
+<div class="card">
+<h2>📊 Отчёт — как в Excel</h2>
+<div id="stats" class="stats"></div>
+</div>
+<div class="card">
+<div class="scroll"><table id="reportTable"></table></div>
+</div>
+<button class="btn danger" onclick="clearReport()">Очистить отчёт</button>
+</section>
+
+<section id="reference" class="hidden">
+<div class="card">
+<h2>⚙️ Справочник услуг</h2>
+<div class="scroll"><table id="serviceTable"></table></div>
+<h3>Добавить услугу</h3>
+<div class="row2">
+<div><label>Услуга</label><input id="serviceName"></div>
+<div><label>Цена услуги</label><input id="servicePrice" type="number" step=".01"></div>
+</div>
+<div class="row2">
+<div><label>Тип расчёта</label><select id="serviceType"><option>вес</option><option>смешанный</option><option>штуки</option><option>аренда</option><option>деньги</option></select></div>
+<div><label>Единица</label><select id="serviceUnit"><option>гр</option><option>шт</option><option>час</option><option>руб</option></select></div>
+</div>
+<button class="btn primary" style="margin-top:10px" onclick="addService()">＋ Добавить услугу</button>
+</div>
+<div class="card"><h2>☕ Кофе</h2><table id="coffeeTable"></table></div>
+<div class="card"><h2>🎮 VIP</h2><table id="vipTable"></table></div>
+</section>
+
+<section id="instruction" class="hidden">
+<div class="card">
+<h2>❓ Инструкция</h2>
+<h3>Продажа</h3>
+<p>1. Нажми услугу нужное количество раз. Например, 3 посетителя → 3 раза «Чай в стаканчике проливом».</p>
+<p>2. Выбери чай и введи граммы → «Добавить товар в чек».</p>
+<p>3. Добавь кофе, VIP или другие позиции таким же способом.</p>
+<p>4. Проверь итог и нажми «ПРОДАТЬ».</p>
+<h3>Важно</h3>
+<p>Товар списывается со склада только после нажатия «ПРОДАТЬ». Услуги склад не уменьшают.</p>
+</div>
+</section>
+
 </main>
 
-<div id="modal" class="modal hidden"><div class="modalbox" id="modalBox"></div></div>
-
 <script>
-const $=id=>document.getElementById(id),money=x=>Math.round((Number(x)||0)*100)/100;
-const P=[
-["1001 ночь",5,580,2],["Мастер и Маргарита",5,200,2],["Изысканный вкус",5,280,2],["Сочный грейпфрукт",5,310,2],["Загадка Клеопатры",5,520,2],["Дамский угодник",4,250,1.6],["Божественный нектар",4,600,1.6],["Утро Клеопатры",5,675,2],["Чай молодости и красоты",7,640,3],["Здоровое пищеварение",5,0,2],["Вишневый пунш",4,150,1.6],["Клубничный зефир",4,290,1.6],["Красный сарафан",6,150,2.4],["Глинтвейн",6,240,2.4],["Пуэр",1,0,1]
+const $=id=>document.getElementById(id);
+const money=x=>Math.round((Number(x)||0)*100)/100;
+
+const defaultProducts=[
+["1001 ночь",5,580,2],["Мастер и Маргарита",5,200,2],["Изысканный вкус",5,280,2],["Сочный грейпфрукт",5,310,2],
+["Загадка Клеопатры",5,520,2],["Дамский угодник",4,250,1.6],["Божественный нектар",4,600,1.6],
+["Утро Клеопатры",5,675,2],["Чай молодости и красоты",7,640,3],["Здоровое пищеварение",5,0,2],
+["Вишневый пунш",4,150,1.6],["Клубничный зефир",4,290,1.6],["Красный сарафан",6,150,2.4],["Глинтвейн",6,240,2.4],
+["Масала",5,314,2],["Пуэр",1,0,1]
 ].map(x=>({name:x[0],price:x[1],stock:x[2],cost:x[3],stickers:0,unit:"гр"}));
-const S=[["Чай россыпью","вес","гр",0],["Чай проливом","смешанный","шт",200],["Чай в стаканчике по черному","смешанный","шт",80],["Чайная церемония Пин ча","смешанный","шт",150],["Вип комната","аренда","час",0],["Кофе","штуки","шт",0],["Товар как есть","штуки","шт",0],["Упаковка или прочее","деньги","руб",0]].map(x=>({name:x[0],type:x[1],unit:x[2],price:x[3]}));
-let products=JSON.parse(localStorage.chaiV4Products||"null")||P;
-let services=JSON.parse(localStorage.chaiV4Services||"null")||S;
-let coffee=JSON.parse(localStorage.chaiV4Coffee||"null")||[{name:"Эспрессо",unit:"шт",price:80},{name:"Латте",unit:"шт",price:140},{name:"Капучино",unit:"шт",price:140},{name:"Американо",unit:"шт",price:110}];
-let vip=JSON.parse(localStorage.chaiV4Vip||"null")||[{name:"Игровой (PS4)",unit:"час",price:250},{name:"Чайный",unit:"час",price:350},{name:"Чайный игроман",unit:"час",price:600},{name:"Игровой (PS5)",unit:"час",price:350}];
-let sales=JSON.parse(localStorage.chaiV4Sales||"[]"),check=[];
-function save(){localStorage.chaiV4Products=JSON.stringify(products);localStorage.chaiV4Services=JSON.stringify(services);localStorage.chaiV4Coffee=JSON.stringify(coffee);localStorage.chaiV4Vip=JSON.stringify(vip);localStorage.chaiV4Sales=JSON.stringify(sales)}
-function tab(id,b){["sales","base","receive","report","reference"].forEach(x=>$(x).classList.toggle("hidden",x!==id));document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");draw()}
+
+const defaultServices=[
+["Чай россыпью","вес","гр",0],["Чай в стаканчике проливом","смешанный","шт",130],
+["Чай в стаканчике по черному","смешанный","шт",80],["Чайная церемония Пин ча","смешанный","шт",150],
+["Вип комната","аренда","час",0],["Кофе","штуки","шт",0],["Товар как есть","штуки","шт",0],
+["Упаковка или прочее","деньги","руб",0]
+].map(x=>({name:x[0],type:x[1],unit:x[2],price:x[3]}));
+
+let products=JSON.parse(localStorage.chaiExcelProducts||"null")||defaultProducts;
+let services=JSON.parse(localStorage.chaiExcelServices||"null")||defaultServices;
+let coffee=JSON.parse(localStorage.chaiExcelCoffee||"null")||[
+{name:"Эспрессо",unit:"шт",price:80},{name:"Латте",unit:"шт",price:140},{name:"Капучино",unit:"шт",price:140},{name:"Американо",unit:"шт",price:110}
+];
+let vip=JSON.parse(localStorage.chaiExcelVip||"null")||[
+{name:"Игровой (PS4)",unit:"час",price:250},{name:"Чайный ",unit:"час",price:350},{name:"Чайный игроман",unit:"час",price:600},{name:"Игровой (PS5)",unit:"час",price:350}
+];
+let sales=JSON.parse(localStorage.chaiExcelSales||"[]");
+let check=[];
+
+function save(){
+ localStorage.chaiExcelProducts=JSON.stringify(products);
+ localStorage.chaiExcelServices=JSON.stringify(services);
+ localStorage.chaiExcelCoffee=JSON.stringify(coffee);
+ localStorage.chaiExcelVip=JSON.stringify(vip);
+ localStorage.chaiExcelSales=JSON.stringify(sales);
+}
+function tab(id,b){
+ ["sales","base","receive","report","reference","instruction"].forEach(x=>$(x).classList.toggle("hidden",x!==id));
+ document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");draw();
+}
 function productOptions(){return products.map((p,i)=>`<option value="${i}">${p.name} — ${p.price} ₽/${p.unit}</option>`).join("")}
-function fill(){ $("productSelect").innerHTML=productOptions();$("receiveProduct").innerHTML=productOptions() }
-
-function showModal(content){
-  $("modalBox").innerHTML=content||"<h2>Ошибка</h2><p>Не удалось открыть окно.</p><button class='btn' onclick='closeModal()'>Закрыть</button>";
-  $("modal").classList.remove("hidden");
+function fillSelects(){
+ $("productSelect").innerHTML=productOptions();
+ $("receiveProduct").innerHTML=productOptions();
 }
-function chooseTeaForService(si){
-  const s=services[si];
-  if(!s){closeModal();return alert("Услуга не найдена. Проверь раздел «Справочник».");}
-  if(s.name!=="Чай проливом" && s.name!=="Чай в стаканчике по черному")return addService(si);
-  openTeaModal(si);
+function addServiceLine(i){
+ const s=services[i];
+ let qty=1;
+ if(s.unit==="руб"){qty=Number(prompt("Введите сумму:", "100"))||0;if(!qty)return}
+ if(s.unit==="час"){qty=Number(prompt("Количество часов:", "1"))||0;if(!qty)return}
+ check.push({kind:"service",service:s.name,product:"",qty,unit:s.unit,price:s.price,total:money(s.price*qty),cost:0,stickers:0,discount:0});
+ renderCheck();
 }
-function openTeaModal(si){
-  const s=services[si];
-  if(!s){closeModal();return alert("Услуга не найдена.");}
-  const teas=products.map((p,idx)=>({p,idx})).filter(x=>x.p.unit==="гр");
-  if(!teas.length)return showModal("<h2>Нет чая</h2><p class='muted'>Добавь чай в разделе «База».</p><button class='btn' onclick='closeModal()'>Закрыть</button>");
-  showModal(`<h2>${s.name}</h2><p class="muted">Выбери чай, затем укажи граммы.</p><div class="tiles">${teas.map(x=>`<button class="tile" onclick="chooseTea(${si},${x.idx})">${x.p.name}<small>${x.p.price} ₽/г · остаток ${x.p.stock} г</small></button>`).join("")}</div><button class="btn" style="margin-top:12px" onclick="closeModal()">Отмена</button>`);
+function addCoffee(i){
+ const c=coffee[i],qty=Number(prompt("Количество:", "1"))||0;if(!qty)return;
+ check.push({kind:"coffee",service:"Кофе",product:c.name,qty,unit:c.unit,price:c.price,total:money(c.price*qty),cost:0,stickers:0,discount:0});
+ renderCheck();
 }
-function chooseTea(si,pi){
-  const p=products[pi],s=services[si];
-  if(!p||!s){closeModal();return alert("Не удалось выбрать чай.");}
-  showModal(`<h2>${s.name}</h2><b>${p.name}</b><div class="hint">Цена чая: ${p.price} ₽/г<br>Услуга: ${s.price} ₽ за посещение<br>Остаток: ${p.stock} г</div>
-  <label>Сколько грамм?</label><input id="mgrams" type="number" min=".01" step=".01" value="10">
-  <label>Скидка %</label><input id="mdisc" type="number" min="0" max="100" step=".01" value="0">
-  <label>Наклеек</label><input id="mstick" type="number" min="0" step="1" value="0">
-  <button class="btn primary" style="width:100%;margin-top:10px" onclick="addTeaService(${si},${pi})">Добавить в чек</button>
-  <button class="btn" style="width:100%;margin-top:7px" onclick="openTeaModal(${si})">← Другой чай</button>`);
+function addVip(i){
+ const v=vip[i],qty=Number(prompt("Количество часов:", "1"))||0;if(!qty)return;
+ check.push({kind:"vip",service:"Вип комната",product:v.name,qty,unit:v.unit,price:v.price,total:money(v.price*qty),cost:0,stickers:0,discount:0});
+ renderCheck();
 }
-function addTeaService(si,pi){
- const s=services[si],p=products[pi],g=Number($("mgrams").value),disc=Number($("mdisc").value)||0,stick=Number($("mstick").value)||0;
- if(!g)return alert("Введите граммы");if(p.stock<g)return alert("Недостаточно остатка: "+p.stock+" г");
- const tea=money(p.price*g), service=money(s.price), gross=tea+service;
- check.push({kind:"mixed",service:s.name,product:p.name,productIndex:pi,qty:g,unit:"гр",teaPrice:p.price,servicePrice:service,total:money(gross*(1-disc/100)),cost:money(p.cost*g),stickers:stick,discount:disc});
- closeModal();renderCheck();
+function addProductLine(){
+ const i=+$("productSelect").value,p=products[i],qty=Number($("productQty").value),disc=Number($("productDiscount").value)||0,stick=Number($("productStickers").value)||0;
+ if(!qty)return alert("Введите количество");
+ if(p.stock<qty)return alert("Недостаточно товара на складе. Остаток: "+p.stock+" "+p.unit);
+ let gross=p.price*qty,total=money(gross*(1-disc/100));
+ check.push({kind:"product",service:"Чай россыпью",product:p.name,productIndex:i,qty,unit:p.unit,price:p.price,total,cost:money(p.cost*qty),stickers:stick,discount:disc});
+ renderCheck();
 }
-function addTeaOnly(){const i=+$("productSelect").value,p=products[i],g=Number($("productQty").value),d=Number($("productDiscount").value)||0,st=Number($("productStickers").value)||0;if(!g)return alert("Введите граммы");if(p.stock<g)return alert("Недостаточно остатка");check.push({kind:"product",service:"Чай россыпью",product:p.name,productIndex:i,qty:g,unit:"гр",teaPrice:p.price,servicePrice:0,total:money(p.price*g*(1-d/100)),cost:money(p.cost*g),stickers:st,discount:d});renderCheck()}
-function addService(i){const s=services[i],q=s.unit==="час"?(Number(prompt("Количество часов","1"))||0):1;if(!q)return;check.push({kind:"service",service:s.name,product:"",qty:q,unit:s.unit,teaPrice:0,servicePrice:s.price,total:money(s.price*q),cost:0,stickers:0,discount:0});renderCheck()}
-function addCoffee(i){const c=coffee[i],q=Number(prompt("Количество","1"))||0;if(!q)return;check.push({kind:"coffee",service:"Кофе",product:c.name,qty:q,unit:c.unit,teaPrice:0,servicePrice:c.price,total:money(c.price*q),cost:0,stickers:0,discount:0});renderCheck()}
-function addVip(i){const v=vip[i],q=Number(prompt("Количество часов","1"))||0;if(!q)return;check.push({kind:"vip",service:"Вип комната",product:v.name,qty:q,unit:v.unit,teaPrice:0,servicePrice:v.price,total:money(v.price*q),cost:0,stickers:0,discount:0});renderCheck()}
-function renderCheck(){ $("check").innerHTML=check.length?check.map((x,i)=>`<div class="cartrow"><div><b>${x.service}</b><br>${x.product||""}<div class="muted">${x.kind==="mixed"?`${x.qty} г × ${x.teaPrice} ₽ + услуга ${x.servicePrice} ₽`:`${x.qty} ${x.unit} × ${x.servicePrice||x.teaPrice} ₽`}${x.discount?` · скидка ${x.discount}%`:""}${x.stickers?` · наклеек ${x.stickers}`:""}</div></div><div><b>${x.total} ₽</b><br><button class="btn" onclick="editCheckItem(${i})">✏️</button><button class="btn danger" onclick="check.splice(${i},1);renderCheck()">×</button></div></div>`).join(""):"<div class='muted'>Чек пуст</div>";$("total").textContent=money(check.reduce((a,x)=>a+x.total,0))}
-function editCheckItem(i){const x=check[i];if(x.kind==="mixed"||x.kind==="product"){const pi=products.findIndex(p=>p.name===x.product);$("modalBox").innerHTML=`<h2>Редактировать позицию</h2><label>Чай</label><select id="eiTea">${productOptions()}</select><label>Граммы</label><input id="eiQty" type="number" step=".01" value="${x.qty}"><label>Скидка %</label><input id="eiDisc" type="number" step=".01" value="${x.discount||0}"><label>Наклейки</label><input id="eiStick" type="number" step="1" value="${x.stickers||0}"><button class="btn primary" style="width:100%;margin-top:10px" onclick="saveCheckTea(${i})">Сохранить</button>`;$("modal").classList.remove("hidden");$("eiTea").value=pi;return}
-let q=Number(prompt("Количество:",x.qty));if(!q)return;x.qty=q;x.total=money((x.servicePrice||x.teaPrice)*q);renderCheck()}
-function saveCheckTea(i){const x=check[i],pi=+$("eiTea").value,p=products[pi],g=Number($("eiQty").value),d=Number($("eiDisc").value)||0,st=Number($("eiStick").value)||0;if(!g)return;if(p.stock<g && pi!==x.productIndex)return alert("Недостаточно остатка");x.product=p.name;x.productIndex=pi;x.qty=g;x.teaPrice=p.price;x.discount=d;x.stickers=st;x.total=money((p.price*g+(x.kind==="mixed"?x.servicePrice:0))*(1-d/100));x.cost=money(p.cost*g);closeModal();renderCheck()}
-function closeModal(){$("modal").classList.add("hidden");$("modalBox").innerHTML=""}
-$("modal").addEventListener("click",e=>{if(e.target===$("modal"))closeModal()});
+function quickTea(i){$("productSelect").value=i;$("productQty").value=10;addProductLine()}
+function renderCheck(){
+ $("check").innerHTML=check.length?check.map((x,i)=>`<div class="cartrow">
+<div><b>${x.service}</b><br>${x.product||""}<div class="muted">${x.qty} ${x.unit} × ${x.price} ₽${x.discount?` · скидка ${x.discount}%`:""}${x.stickers?` · наклеек ${x.stickers}`:""}</div></div>
+<div><b>${x.total} ₽</b><br><button class="btn" onclick="check.splice(${i},1);renderCheck()">×</button></div></div>`).join(""):"<div class='muted'>Чек пуст</div>";
+ $("total").textContent=money(check.reduce((a,x)=>a+x.total,0));
+}
 function clearCheck(){check=[];renderCheck()}
-function sell(){if(!check.length)return alert("Чек пуст");for(const x of check)if((x.kind==="mixed"||x.kind==="product")&&products[x.productIndex].stock<x.qty)return alert("Недостаточно: "+x.product);for(const x of check)if(x.kind==="mixed"||x.kind==="product"){products[x.productIndex].stock-=x.qty;products[x.productIndex].stickers=Math.max(0,(products[x.productIndex].stickers||0)-x.stickers)}const total=money(check.reduce((a,x)=>a+x.total,0));sales.unshift({id:Date.now(),date:new Date().toISOString(),items:JSON.parse(JSON.stringify(check)),total});save();alert("Чек сохранён: "+total+" ₽");check=[];draw()}
-function drawSales(){$("serviceTiles").innerHTML=services.map((s,i)=>`<button class="tile" onclick="chooseTeaForService(${i})">${s.name}<small>${s.price} ₽ / ${s.unit}</small></button>`).join("");$("teaTiles").innerHTML=products.filter(p=>p.unit==="гр").map(p=>{let i=products.indexOf(p);return `<button class="tile" onclick="openTeaModal(0);setTimeout(()=>chooseTea(0,${i}),0)">${p.name}<small>${p.price} ₽/г · ${p.stock} г</small></button>`}).join("");$("coffeeTiles").innerHTML=coffee.map((c,i)=>`<button class="tile" onclick="addCoffee(${i})">${c.name}<small>${c.price} ₽</small></button>`).join("");$("vipTiles").innerHTML=vip.map((v,i)=>`<button class="tile" onclick="addVip(${i})">${v.name}<small>${v.price} ₽/час</small></button>`).join("")}
-function drawBase(){$("baseTable").innerHTML="<tr><th>Наименование</th><th>Цена</th><th>Остаток</th><th>Себестоимость</th><th>Наклейки</th><th>Действия</th></tr>"+products.map((p,i)=>`<tr><td>${p.name}</td><td>${p.price} ₽/${p.unit}</td><td class="${p.stock<=0?"bad":""}">${p.stock} ${p.unit}</td><td>${p.cost} ₽</td><td>${p.stickers||0}</td><td><div class=actions><button class=btn onclick="editProduct(${i})">✏️</button><button class="btn danger" onclick="deleteProduct(${i})">×</button></div></td></tr>`).join("")}
-function openProductModal(i=null){$("modalBox").innerHTML=`<h2>${i===null?"Новый товар":"Редактировать товар"}</h2><label>Название</label><input id="pn"><div class=row3><div><label>Единица</label><select id=pu><option>гр</option><option>шт</option></select></div><div><label>Цена продажи</label><input id=pp type=number step=.01></div><div><label>Остаток</label><input id=ps type=number step=.01></div></div><div class=row2><div><label>Себестоимость</label><input id=pc type=number step=.01></div><div><label>Наклейки</label><input id=pst type=number step=1></div></div><button class="btn primary" style="margin-top:10px" onclick="saveProduct(${i===null?"null":i})">Сохранить</button><button class=btn style="margin-top:10px" onclick=closeModal()>Отмена</button>`;$("modal").classList.remove("hidden");if(i!==null){let p=products[i];pn.value=p.name;pu.value=p.unit;pp.value=p.price;ps.value=p.stock;pc.value=p.cost;pst.value=p.stickers||0}}
-function saveProduct(i){let p=i===null?{}:products[i];p.name=$("pn").value.trim();p.unit=$("pu").value;p.price=Number($("pp").value)||0;p.stock=Number($("ps").value)||0;p.cost=Number($("pc").value)||0;p.stickers=Number($("pst").value)||0;if(!p.name)return alert("Название обязательно");if(i===null)products.push(p);save();closeModal();draw()}
-function editProduct(i){openProductModal(i)}function deleteProduct(i){if(confirm("Удалить товар «"+products[i].name+"»?")){products.splice(i,1);save();draw()}}
-function receiveProduct(){let i=+$("receiveProduct").value,q=Number($("receiveQty").value)||0;if(!q)return alert("Введите количество");products[i].stock+=q;if($("receiveCost").value!=="")products[i].cost=Number($("receiveCost").value);products[i].stickers+=(Number($("receiveStickers").value)||0);save();draw();alert("Принято")}
-function writeOff(){let i=+$("receiveProduct").value,q=Number($("receiveQty").value)||0;if(!q)return;if(products[i].stock<q)return alert("Недостаточно остатка");products[i].stock-=q;save();draw();alert("Списано")}
-function createReceiveProduct(){let name=$("rn").value.trim();if(!name)return alert("Название обязательно");products.push({name,unit:$("ru").value,stock:Number($("rq").value)||0,cost:Number($("rc").value)||0,price:Number($("rp").value)||0,stickers:Number($("rs").value)||0});save();draw();alert("Создано")}
-function drawReport(){let revenue=money(sales.reduce((a,s)=>a+s.total,0)),profit=money(sales.reduce((a,s)=>a+s.items.reduce((b,x)=>b+(x.total-(x.cost||0)),0),0));$("stats").innerHTML=`<div class=stat>Всего<b>${revenue} ₽</b></div><div class=stat>Чеков<b>${sales.length}</b></div><div class=stat>Прибыль<b>${profit} ₽</b></div><div class=stat>Позиций<b>${sales.reduce((a,s)=>a+s.items.length,0)}</b></div>`;$("reportList").innerHTML=sales.map((s,si)=>`<div class=card style="margin:0 0 10px"><b>Чек №${sales.length-si}</b> · ${new Date(s.date).toLocaleString("ru-RU")}<br><div class=muted>${s.items.map(x=>`${x.service}${x.product?" — "+x.product:""} — ${x.qty} ${x.unit} — ${x.total} ₽`).join("<br>")}</div><h3 style="margin:8px 0">Итого: ${s.total} ₽</h3><button class="btn primary" onclick="editSale(${si})">✏️ Редактировать чек</button><button class="btn danger" onclick="deleteSale(${si})">🗑 Удалить чек</button></div>`).join("")||"<p class=muted>Продаж пока нет.</p>"}
-let editingSale=null;
-
-function editSale(si){
-  const sale=sales[si];
-  if(!sale)return;
-  editingSale={si,original:JSON.parse(JSON.stringify(sale.items||[])),items:JSON.parse(JSON.stringify(sale.items||[]))};
-  openSaleEditor();
+function sell(){
+ if(!check.length)return alert("Чек пуст");
+ for(const x of check){
+   if(x.kind==="product"){
+     const p=products[x.productIndex];
+     if(p.stock<x.qty)return alert("Недостаточно остатка: "+p.name);
+   }
+ }
+ for(const x of check){
+   if(x.kind==="product"){
+     const p=products[x.productIndex];p.stock-=x.qty;p.stickers=Math.max(0,(p.stickers||0)-x.stickers);
+   }
+ }
+ const total=money(check.reduce((a,x)=>a+x.total,0));
+ sales.unshift({date:new Date().toISOString(),items:JSON.parse(JSON.stringify(check)),total});
+ save();alert("Продажа проведена на "+total+" ₽");check=[];draw();
 }
-function openSaleEditor(){
-  if(!editingSale)return;
-  const {si,items}=editingSale;
-  $("modalBox").innerHTML=`<h2>Редактирование чека №${sales.length-si}</h2>
-  <p class="muted">После сохранения склад автоматически пересчитается.</p>
-  <div id="editSaleItems">${items.map((x,i)=>`<div class="card"><b>${x.service}</b>${x.product?`<br>${x.product}`:""}<div class="muted">${x.qty} ${x.unit} — ${x.total} ₽</div><button class="btn" onclick="editSavedItem(${i})">✏️ Изменить</button><button class="btn danger" onclick="removeSavedItem(${i})">Удалить</button></div>`).join("")||"<p class='muted'>Чек пуст.</p>"}</div>
-  <h2>Итого: ${money(items.reduce((a,x)=>a+x.total,0))} ₽</h2>
-  <button class="btn primary" onclick="saveEditedSale()">✓ Сохранить изменения</button>
-  <button class="btn" onclick="closeEditSale()">Отмена</button>`;
-  $("modal").classList.remove("hidden");
+function drawServices(){
+ $("serviceTiles").innerHTML=services.map((s,i)=>`<button class="tile" onclick="addServiceLine(${i})">${s.name}<small>${s.price} ₽ / ${s.unit}</small></button>`).join("");
+ $("teaTiles").innerHTML=products.filter(p=>p.unit==="гр").map(p=>{let i=products.indexOf(p);return `<button class="tile" onclick="quickTea(${i})">${p.name}<small>${p.price} ₽/г · ${p.stock} г</small></button>`}).join("");
+ $("coffeeTiles").innerHTML=coffee.map((c,i)=>`<button class="tile" onclick="addCoffee(${i})">${c.name}<small>${c.price} ₽</small></button>`).join("");
+ $("vipTiles").innerHTML=vip.map((v,i)=>`<button class="tile" onclick="addVip(${i})">${v.name}<small>${v.price} ₽/час</small></button>`).join("");
 }
-function closeEditSale(){editingSale=null;closeModal()}
-function editSavedItem(ii){
-  if(!editingSale)return;
-  const x=editingSale.items[ii];
-  if(!x)return;
-  if(x.kind==="mixed"||x.kind==="product"){
-    const opts=products.map((p,i)=>`<option value="${i}">${p.name} — ${p.price} ₽/г</option>`).join("");
-    showModal(`<h2>Изменить чай</h2><label>Чай</label><select id="esiTea">${opts}</select><label>Граммы</label><input id="esiQty" type="number" min=".01" step=".01" value="${x.qty}"><label>Скидка %</label><input id="esiDisc" type="number" min="0" max="100" step=".01" value="${x.discount||0}"><label>Наклеек</label><input id="esiStick" type="number" min="0" step="1" value="${x.stickers||0}"><button class="btn primary" style="width:100%;margin-top:10px" onclick="saveEditedTeaItem(${ii})">Сохранить</button><button class="btn" style="width:100%;margin-top:7px" onclick="openSaleEditor()">Отмена</button>`);
-    $("esiTea").value=String(x.productIndex);
-    return;
-  }
-  showModal(`<h2>Изменить позицию</h2><b>${x.service}${x.product?` — ${x.product}`:""}</b><label>Количество</label><input id="esiQtySimple" type="number" min=".01" step=".01" value="${x.qty}"><button class="btn primary" style="width:100%;margin-top:10px" onclick="saveSimpleItem(${ii})">Сохранить</button><button class="btn" style="width:100%;margin-top:7px" onclick="openSaleEditor()">Отмена</button>`);
+function drawBase(){
+ $("baseTable").innerHTML="<tr><th>Наименование</th><th>Цена за гр/шт(руб)</th><th>В наличии</th><th>Себестоимость</th><th>Наклейки</th><th></th></tr>"+
+ products.map((p,i)=>`<tr><td>${p.name}</td><td>${p.price} ₽</td><td class="${p.stock<=0?"bad":""}">${p.stock} ${p.unit}</td><td>${p.cost} ₽</td><td>${p.stickers||0}</td><td><button class="btn" onclick="editProduct(${i})">✏️</button> <button class="btn danger" onclick="deleteProduct(${i})">×</button></td></tr>`).join("");
 }
-function saveEditedTeaItem(ii){
-  const x=editingSale.items[ii],pi=Number($("esiTea").value),p=products[pi],g=Number($("esiQty").value),d=Number($("esiDisc").value)||0,st=Number($("esiStick").value)||0;
-  if(!p||!g)return alert("Проверь чай и граммы.");
-  const available=p.stock+(x.productIndex===pi?Number(x.qty)||0:0);
-  if(g>available)return alert(`Недостаточно остатка. Доступно: ${available} г.`);
-  x.product=p.name;x.productIndex=pi;x.qty=g;x.teaPrice=p.price;x.discount=d;x.stickers=st;x.cost=money(p.cost*g);x.total=money((p.price*g+(x.kind==="mixed"?Number(x.servicePrice)||0:0))*(1-d/100));
-  openSaleEditor();
+function showNewProduct(){$("newProduct").classList.remove("hidden")}
+function createProduct(){
+ const name=$("newName").value.trim();if(!name)return alert("Введите название");
+ products.push({name,unit:$("newUnit").value,price:Number($("newPrice").value)||0,stock:Number($("newStock").value)||0,cost:Number($("newCost").value)||0,stickers:Number($("newStickers").value)||0});
+ save();$("newProduct").classList.add("hidden");draw();
 }
-function saveSimpleItem(ii){
-  const x=editingSale.items[ii],q=Number($("esiQtySimple").value);
-  if(!q)return;
-  x.qty=q;x.total=money((x.servicePrice||x.teaPrice||0)*q);
-  openSaleEditor();
+function editProduct(i){
+ const p=products[i],n=prompt("Наименование:",p.name);if(n===null)return;
+ p.name=n;p.price=Number(prompt("Цена за гр/шт:",p.price));p.stock=Number(prompt("В наличии:",p.stock));p.cost=Number(prompt("Себестоимость:",p.cost));p.stickers=Number(prompt("Наклейки:",p.stickers||0));save();draw();
 }
-function removeSavedItem(ii){if(!editingSale)return;editingSale.items.splice(ii,1);openSaleEditor()}
-function saveEditedSale(){
-  if(!editingSale)return;
-  const {si,original,items}=editingSale,delta={};
-  for(const x of original)if(x.kind==="mixed"||x.kind==="product")delta[x.productIndex]=(delta[x.productIndex]||0)+Number(x.qty||0);
-  for(const x of items)if(x.kind==="mixed"||x.kind==="product")delta[x.productIndex]=(delta[x.productIndex]||0)-Number(x.qty||0);
-  for(const [k,d] of Object.entries(delta)){
-    const i=Number(k);
-    if(!products[i])return alert("Товар из старого чека больше не существует.");
-    if(products[i].stock+d<0)return alert(`Недостаточно остатка «${products[i].name}». После исправления: ${money(products[i].stock+d)} г.`);
-  }
-  for(const [k,d] of Object.entries(delta)){const i=Number(k);products[i].stock=money(products[i].stock+d)}
-  sales[si].items=JSON.parse(JSON.stringify(items));
-  sales[si].total=money(items.reduce((a,x)=>a+x.total,0));
-  sales[si].editedAt=new Date().toISOString();
-  save();editingSale=null;closeModal();draw();alert("Чек исправлен. Остатки склада обновлены.");
+function deleteProduct(i){if(confirm("Удалить «"+products[i].name+"»?")){products.splice(i,1);save();draw()}}
+function receiveProduct(){
+ const i=+$("receiveProduct").value,q=Number($("receiveQty").value)||0;if(!q)return alert("Введите количество");
+ products[i].stock+=q;
+ if($("receiveCost").value!=="")products[i].cost=Number($("receiveCost").value);
+ products[i].stickers+=(Number($("receiveStickers").value)||0);
+ save();alert("Товар принят");draw();
 }
-function deleteSale(si){if(!confirm("Удалить этот чек?"))return;const s=sales[si];for(const x of s.items)if(x.kind==="mixed"||x.kind==="product")products[x.productIndex].stock+=x.qty; sales.splice(si,1);save();draw()}
-function drawReference(){$("serviceTable").innerHTML="<tr><th>Услуга</th><th>Тип</th><th>Ед.</th><th>Цена</th><th>Действия</th></tr>"+services.map((s,i)=>`<tr><td>${s.name}</td><td>${s.type}</td><td>${s.unit}</td><td>${s.price} ₽</td><td><div class=actions><button class=btn onclick="editService(${i})">✏️ Редактировать</button><button class="btn danger" onclick="deleteService(${i})">Удалить</button></div></td></tr>`).join("");$("coffeeTable").innerHTML="<tr><th>Кофе</th><th>Ед.</th><th>Цена</th></tr>"+coffee.map(c=>`<tr><td>${c.name}</td><td>${c.unit}</td><td>${c.price} ₽</td></tr>`).join("");$("vipTable").innerHTML="<tr><th>VIP</th><th>Ед.</th><th>Цена</th></tr>"+vip.map(v=>`<tr><td>${v.name}</td><td>${v.unit}</td><td>${v.price} ₽</td></tr>`).join("")}
-function editService(i){let s=services[i];$("modalBox").innerHTML=`<h2>Редактировать услугу</h2><label>Название</label><input id=en value="${s.name}"><label>Цена</label><input id=ep type=number step=.01 value="${s.price}"><label>Тип расчёта</label><select id=et><option>вес</option><option>смешанный</option><option>штуки</option><option>аренда</option><option>деньги</option></select><label>Единица</label><select id=eu><option>гр</option><option>шт</option><option>час</option><option>руб</option></select><button class="btn primary" style="margin-top:10px" onclick="saveService(${i})">Сохранить</button>`;$("modal").classList.remove("hidden");$("et").value=s.type;$("eu").value=s.unit}
-function saveService(i){services[i].name=$("en").value.trim();services[i].price=Number($("ep").value)||0;services[i].type=$("et").value;services[i].unit=$("eu").value;save();closeModal();draw()}
+function writeOff(){
+ const i=+$("receiveProduct").value,q=Number($("receiveQty").value)||0;if(!q)return alert("Введите количество");
+ if(products[i].stock<q)return alert("Недостаточно остатка");
+ products[i].stock-=q;save();alert("Товар списан");draw();
+}
+function createReceiveProduct(){
+ const name=$("receiveNewName").value.trim();if(!name)return alert("Введите название");
+ products.push({name,unit:"гр",price:Number($("receiveNewPrice").value)||0,stock:Number($("receiveNewQty").value)||0,cost:Number($("receiveNewCost").value)||0,stickers:Number($("receiveNewStickers").value)||0});
+ save();alert("Новый товар создан");draw();
+}
+function drawReference(){
+ $("serviceTable").innerHTML="<tr><th>Услуга</th><th>Тип расчёта</th><th>Единица</th><th>Цена услуги</th><th></th></tr>"+
+ services.map((s,i)=>`<tr><td>${s.name}</td><td>${s.type}</td><td>${s.unit}</td><td>${s.price} ₽</td><td><button class="btn danger" onclick="deleteService(${i})">Удалить</button></td></tr>`).join("");
+ $("coffeeTable").innerHTML="<tr><th>Кофе</th><th>Ед.</th><th>Цена</th></tr>"+coffee.map(c=>`<tr><td>${c.name}</td><td>${c.unit}</td><td>${c.price} ₽</td></tr>`).join("");
+ $("vipTable").innerHTML="<tr><th>VIP</th><th>Ед.</th><th>Цена</th></tr>"+vip.map(v=>`<tr><td>${v.name}</td><td>${v.unit}</td><td>${v.price} ₽</td></tr>`).join("");
+}
+function addService(){
+ const name=$("serviceName").value.trim();if(!name)return;
+ services.push({name,type:$("serviceType").value,unit:$("serviceUnit").value,price:Number($("servicePrice").value)||0});
+ save();$("serviceName").value="";$("servicePrice").value="";draw();
+}
 function deleteService(i){if(confirm("Удалить услугу?")){services.splice(i,1);save();draw()}}
-function addService(){let n=$("sn").value.trim();if(!n)return;services.push({name:n,type:$("st").value,unit:$("su").value,price:Number($("sp").value)||0});save();draw()}
-function draw(){fill();drawSales();renderCheck();drawBase();drawReport();drawReference()}
-window.addEventListener("error",()=>{if(!$("modal").classList.contains("hidden"))closeModal()});
+function drawReport(){
+ let revenue=money(sales.reduce((a,s)=>a+s.total,0));
+ let profit=money(sales.reduce((a,s)=>a+s.items.reduce((b,x)=>b+(x.total-(x.cost||0)),0),0));
+ let now=new Date(),today=now.toLocaleDateString("ru-RU"),month=now.getMonth(),year=now.getFullYear();
+ let todaySum=money(sales.filter(s=>new Date(s.date).toLocaleDateString("ru-RU")===today).reduce((a,s)=>a+s.total,0));
+ let monthSum=money(sales.filter(s=>{let d=new Date(s.date);return d.getMonth()===month&&d.getFullYear()===year}).reduce((a,s)=>a+s.total,0));
+ $("stats").innerHTML=`<div class="stat">Всего выручка<b>${revenue} ₽</b></div><div class="stat">Сегодня<b>${todaySum} ₽</b></div><div class="stat">Текущий месяц<b>${monthSum} ₽</b></div><div class="stat">Прибыль<b>${profit} ₽</b></div>`;
+ let rows=[];
+ sales.forEach(s=>s.items.forEach(x=>rows.push(`<tr><td>${new Date(s.date).toLocaleString("ru-RU")}</td><td>${x.service}</td><td>${x.product||""}</td><td>${x.qty} ${x.unit}</td><td>${x.total} ₽</td><td>${money(x.cost||0)} ₽</td><td>${money(x.total-(x.cost||0))} ₽</td><td>${x.stickers||0}</td><td>${x.discount||0}%</td></tr>`)));
+ $("reportTable").innerHTML="<tr><th>Дата</th><th>Услуга</th><th>Товар</th><th>Вес (гр) / Шт</th><th>Выручка</th><th>Себестоимость</th><th>Прибыль</th><th>Наклейки</th><th>Скидка %</th></tr>"+rows.join("");
+}
+function clearReport(){if(confirm("Удалить всю историю продаж?")){sales=[];save();draw()}}
+function draw(){fillSelects();drawServices();renderCheck();drawBase();drawReference();drawReport()}
 draw();
 </script>
 </body>
