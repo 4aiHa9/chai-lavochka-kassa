@@ -48,7 +48,7 @@ th{background:#eee7dd}
 .main-menu-btn small{display:block;margin-top:6px;}
 @media(max-width:520px){.main-menu-grid{grid-template-columns:1fr 1fr}.main-menu-btn{min-height:72px;font-size:16px;}}
 .main-menu-btn{min-height:78px;font-size:18px}.main-menu-btn small{display:block;margin-top:6px}.category-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}.category-head h2{margin:0}.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tile{padding:14px;border:1px solid #ddd;border-radius:14px;background:#fff;text-align:left}.tile small{display:block;margin-top:5px}@media(max-width:600px){.tiles{grid-template-columns:1fr 1fr}}
-</style>
+#mainMenu{display:flex!important;flex-direction:column!important;gap:10px!important}#mainMenu .main-menu-btn{width:100%!important}\n</style>
 
 <style id="vertical-main-menu">
 #mainMenu .grid, #mainMenu .tiles, #mainMenu .main-menu-grid,
@@ -399,18 +399,33 @@ function showReceiveForm(type){
 }
 function createReceiveTea(){
   const name=$("receiveTeaName").value.trim();
-  const qty=Number($("receiveTeaQty").value)||0;
-  const cost=Number($("receiveTeaCost").value)||0;
-  const price=Number($("receiveTeaPrice").value)||0;
+  const qty=Number($("receiveTeaQty").value);
+  const cost=Number($("receiveTeaCost").value);
+  const price=Number($("receiveTeaPrice").value);
   if(!name)return alert("Введите название чая");
-  if(qty<=0)return alert("Введите количество грамм");
-  const existing=products.find(p=>p.name===name && p.unit==="гр");
-  if(existing){existing.stock=money(existing.stock+qty);existing.cost=cost;existing.price=price;}
-  else products.push({name,unit:"гр",price,stock:qty,cost});
+  if(!Number.isFinite(qty)||qty<=0)return alert("Введите количество грамм");
+  if(!Number.isFinite(cost)||cost<0)return alert("Введите себестоимость за грамм");
+  if(!Number.isFinite(price)||price<0)return alert("Введите цену продажи за грамм");
+
+  let p=products.find(x=>x.name.trim().toLowerCase()===name.toLowerCase() && x.unit==="гр");
+  if(p){
+    p.stock=Number(p.stock||0)+qty;
+    p.cost=cost;
+    p.price=price;
+  }else{
+    p={name,unit:"гр",price,stock:qty,cost};
+    products.push(p);
+  }
+
   save();
-  $("receiveTeaName").value="";$("receiveTeaQty").value="";$("receiveTeaCost").value="";$("receiveTeaPrice").value="";
+
+  $("receiveTeaName").value="";
+  $("receiveTeaQty").value="";
+  $("receiveTeaCost").value="";
+  $("receiveTeaPrice").value="";
+
   draw();
-  alert("Чай принят и добавлен в базу → Продажи → Чай россыпью");
+  alert("Чай «"+name+"» добавлен в Базу и в Продажи → Чай россыпью.");
 }
 function createReceiveCoffee(){
   const name=$("receiveCoffeeName").value.trim();
@@ -557,15 +572,39 @@ function renderMainMenu(){
  const host=$("mainMenu"); if(!host)return; host.classList.remove("hidden");
 }
 function openMainCategory(i){
- const names=Object.keys(MAIN_MENU),name=names[i],items=MAIN_MENU[name],main=$("mainMenu"),cat=$("categoryMenu"); main.classList.add("hidden"); cat.classList.remove("hidden");
- if(!items.length){cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>${name}</h2></div><p class="muted">Подпункты этого раздела добавим следующим шагом.</p>`;return;}
- cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>☕ ${name}</h2></div><div class="tiles">${items.map((item,j)=>{let c=coffee.find(x=>x.name===item);return `<button class="tile" onclick="chooseMainItem(${i},${j})"><b>${item}</b>${c?`<small>${c.price} ₽</small>`:''}</button>`}).join('')}</div>`;
+ const names=Object.keys(MAIN_MENU),name=names[i],main=$("mainMenu"),cat=$("categoryMenu");
+ let items=MAIN_MENU[name];
+ if(name==="Чай россыпью") items=products.filter(p=>p.unit==="гр").map(p=>p.name);
+ main.classList.add("hidden"); cat.classList.remove("hidden");
+ if(!items.length){
+   cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>${name}</h2></div><p class="muted">Пока здесь нет товаров. Добавь их через «Приёмка товара».</p>`;
+   return;
+ }
+ cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>${name}</h2></div>
+ <div class="tiles">${items.map((item,j)=>{
+   let c=name==="Кофе"?coffee.find(x=>x.name===item):products.find(x=>x.name===item && x.unit==="гр");
+   return `<button class="tile" onclick="chooseMainItem(${i},${j})"><b>${item}</b>${c?`<small>${c.price} ₽/${name==="Чай россыпью"?"г":"шт"}</small>`:''}</button>`;
+ }).join('')}</div>`;
 }
 function backToMainMenu(){$("categoryMenu").classList.add("hidden");$("categoryMenu").innerHTML='';$("mainMenu").classList.remove("hidden");}
 function chooseMainItem(ci,ii){
- const names=Object.keys(MAIN_MENU),category=names[ci],item=MAIN_MENU[category][ii];
- if(category==='Кофе'){const idx=coffee.findIndex(c=>c.name===item); if(idx>=0){addCoffee(idx);return;} alert('Для «'+item+'» пока не задана цена в справочнике.');return;}
- const si=services.findIndex(s=>s.name===item); if(si>=0){addServiceLine(si);return;}
+ const names=Object.keys(MAIN_MENU),category=names[ci];
+ if(category==="Чай россыпью"){
+   const tea=products.filter(p=>p.unit==="гр")[ii];
+   if(!tea)return alert("Чай не найден в базе");
+   quickTea(products.indexOf(tea));
+   return;
+ }
+ const item=MAIN_MENU[category][ii];
+ if(category==="Кофе"){
+   const idx=coffee.findIndex(c=>c.name===item);
+   if(idx>=0){addCoffee(idx);return;}
+   const p=products.find(x=>x.name===item && x.unit==="шт");
+   if(p){check.push({kind:"product",productIndex:products.indexOf(p),service:"Кофе",product:p.name,qty:1,unit:"шт",price:p.price,total:p.price,cost:p.cost||0});renderCheck();save();return;}
+   return alert("Для «"+item+"» пока не задана цена.");
+ }
+ const si=services.findIndex(s=>s.name===item);
+ if(si>=0){addServiceLine(si);return;}
  showModal(`<h2>${item}</h2><p class="muted">${category}</p><p>Этот раздел пока не заполнен.</p><button class="btn" onclick="closeModal()">Закрыть</button>`);
 }
 renderMainMenu();
