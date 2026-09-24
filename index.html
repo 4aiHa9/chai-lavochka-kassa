@@ -44,14 +44,14 @@ th{background:#eee7dd}
 @media(max-width:760px){.grid{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.row3{grid-template-columns:1fr 1fr}}
 
 .main-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-.main-menu-btn{min-height:78px;font-size:18px;}
-.main-menu-btn small{display:block;margin-top:6px;}
-@media(max-width:520px){.main-menu-grid{grid-template-columns:1fr 1fr}.main-menu-btn{min-height:72px;font-size:16px;}}
+.main-menu-btn{min-height:78px;font-size:17px;text-align:center;}
+.main-menu-btn small{display:block;color:#766c64;margin-top:6px;font-weight:500;}
+.category-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.category-head .btn{flex:0 0 auto;}
+@media(max-width:520px){.main-menu-grid{grid-template-columns:1fr 1fr}.main-menu-btn{min-height:72px;font-size:15px;}}
 </style>
 </head>
 <body>
-<div id="mainMenu"></div>
-
 <header>🐒 Чайная <span>Лавочка</span> — касса</header>
 
 <nav>
@@ -69,41 +69,20 @@ th{background:#eee7dd}
 <div class="grid">
 <div>
 <div class="card">
-<h2>Услуги — быстрый выбор</h2>
-<div id="serviceTiles" class="tiles"></div>
-<div class="hint">
-<b>Как теперь работает смешанная продажа:</b><br>
-Например, пришли 3 человека → нажми «Чай в стаканчике проливом» 3 раза.
-Потом выбери чай и введи 10 г. В чек попадут и 3 услуги, и 10 г чая.
-</div>
+<h2>Продажи</h2>
+<div id="mainMenu" class="tiles main-menu-grid"></div>
+<div id="categoryMenu" class="hidden"></div>
 </div>
 
 <div class="card">
-<h2>Добавить чай / товар</h2>
+<h2>Добавить товар</h2>
 <label>Товар</label>
 <select id="productSelect"></select>
-<div class="row3">
+<div class="row2">
 <div><label>Количество / граммы</label><input id="productQty" type="number" min=".01" step=".01" value="10"></div>
 <div><label>Скидка %</label><input id="productDiscount" type="number" min="0" max="100" step=".01" value="0"></div>
-<div><label>Наклеек</label><input id="productStickers" type="number" min="0" step="1" value="0"></div>
 </div>
 <button class="btn primary" style="width:100%;margin-top:9px" onclick="addProductLine()">＋ Добавить товар в чек</button>
-</div>
-
-<div class="card">
-<h2>Быстрый выбор чая</h2>
-<div id="teaTiles" class="tiles"></div>
-</div>
-
-<div class="card">
-<h2>Кофе</h2>
-<div id="coffeeTiles" class="tiles"></div>
-</div>
-
-<div class="card">
-<h2>VIP</h2>
-<div id="vipTiles" class="tiles"></div>
-</div>
 </div>
 
 <div class="card">
@@ -298,10 +277,10 @@ function showTeaForService(serviceIndex){
 }
 function showTeaAmount(serviceIndex,productIndex){
  const s=services[serviceIndex],p=products[productIndex];
- showModal(`<h2>${s.name}</h2><div class="hint"><b>${p.name}</b><br>${s.price} ₽ услуга + ${p.price} ₽/г чай<br>Остаток: ${p.stock} г</div><label>Граммы</label><input id="teaModalQty" type="number" min="0.01" step="0.01" value="10"><label>Скидка %</label><input id="teaModalDisc" type="number" min="0" max="100" step="0.01" value="0"><label>Наклеек</label><input id="teaModalStick" type="number" min="0" step="1" value="0"><div class="modal-actions"><button class="btn primary" onclick="addTeaWithService(${serviceIndex},${productIndex})">Добавить в чек</button><button class="btn" onclick="showTeaForService(${serviceIndex})">← Другой чай</button></div>`);
+ showModal(`<h2>${s.name}</h2><div class="hint"><b>${p.name}</b><br>${s.price} ₽ услуга + ${p.price} ₽/г чай<br>Остаток: ${p.stock} г</div><label>Граммы</label><input id="teaModalQty" type="number" min="0.01" step="0.01" value="10"><label>Скидка %</label><input id="teaModalDisc" type="number" min="0" max="100" step="0.01" value="0"><div class="modal-actions"><button class="btn primary" onclick="addTeaWithService(${serviceIndex},${productIndex})">Добавить в чек</button><button class="btn" onclick="showTeaForService(${serviceIndex})">← Другой чай</button></div>`);
 }
 function addTeaWithService(serviceIndex,productIndex){
- const s=services[serviceIndex],p=products[productIndex],qty=Number($("teaModalQty").value)||0,disc=Number($("teaModalDisc").value)||0,stick=Number($("teaModalStick").value)||0;
+ const s=services[serviceIndex],p=products[productIndex],qty=Number($("teaModalQty").value)||0,disc=Number($("teaModalDisc").value)||0;
  if(!qty)return alert("Укажи граммы");
  if(p.stock<qty)return alert("Недостаточно остатка: "+p.name+" — "+p.stock+" г");
  const teaTotal=money(p.price*qty*(1-disc/100));
@@ -351,12 +330,60 @@ function sell(){
  for(const x of check)if(x.kind==='product'||x.kind==='mixed'){const p=products[x.productIndex];p.stock-=x.qty;p.stickers=Math.max(0,(p.stickers||0)-x.stickers)}
  const total=money(check.reduce((a,x)=>a+x.total,0)); sales.unshift({date:new Date().toISOString(),items:JSON.parse(JSON.stringify(check)),total}); save();alert('Продажа проведена на '+total+' ₽');check=[];draw();
 }
-function drawServices(){
- $('serviceTiles').innerHTML=services.map((s,i)=>`<button class="tile" onclick="addServiceLine(${i})">${s.name}<small>${s.price} ₽ / ${s.unit}</small></button>`).join('');
- $('teaTiles').innerHTML=products.filter(p=>p.unit==='гр').map(p=>{let i=products.indexOf(p);return `<button class="tile" onclick="quickTea(${i})">${p.name}<small>${p.price} ₽/г · ${p.stock} г</small></button>`}).join('');
- $('coffeeTiles').innerHTML=coffee.map((c,i)=>`<button class="tile" onclick="addCoffee(${i})">${c.name}<small>${c.price} ₽</small></button>`).join('');
- $('vipTiles').innerHTML=vip.map((v,i)=>`<button class="tile" onclick="addVip(${i})">${v.name}<small>${v.price} ₽/час</small></button>`).join('');
+const MAIN_MENU = {
+ "Кофе":["Эспрессо","2х эспрессо","Американо","Капучино","Латте","Флэт Уайт","Бамбл","Эспрессо тоник","Айс латте","Дополнительно","Сиропы","Альтернативное молоко"],
+ "Коктейли":[],
+ "VIP+PS5":[],
+ "Чай россыпью":[],
+ "Чаепитие":[],
+ "Посуда":[],
+ "Чайная церемония":[],
+ "Подарочные наборы":[]
+};
+
+function drawMainMenu(){
+ const main=$("mainMenu"), cat=$("categoryMenu");
+ if(!main||!cat)return;
+ main.innerHTML=Object.keys(MAIN_MENU).map((name,i)=>`<button class="tile main-menu-btn" onclick="openMainCategory(${i})"><b>${name}</b><small>${MAIN_MENU[name].length?"Ассортимент":"Добавить подпункты"}</small></button>`).join("");
 }
+
+function openMainCategory(i){
+ const names=Object.keys(MAIN_MENU),name=names[i],items=MAIN_MENU[name];
+ const main=$("mainMenu"),cat=$("categoryMenu");
+ main.classList.add("hidden");
+ cat.classList.remove("hidden");
+ if(!items.length){
+   cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2 style="margin:0">${name}</h2></div><p class="muted">Подпункты этого раздела добавим следующим шагом.</p>`;
+   return;
+ }
+ cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2 style="margin:0">${name}</h2></div><div class="tiles">${items.map((item,j)=>`<button class="tile" onclick="chooseMainItem(${i},${j})"><b>${item}</b></button>`).join("")}</div>`;
+}
+
+function backToMainMenu(){
+ $("categoryMenu").classList.add("hidden");
+ $("categoryMenu").innerHTML="";
+ $("mainMenu").classList.remove("hidden");
+}
+
+function chooseMainItem(ci,ii){
+ const names=Object.keys(MAIN_MENU),category=names[ci],item=MAIN_MENU[category][ii];
+ // Coffee items use the existing coffee catalog when names match it.
+ const idx=coffee.findIndex(c=>c.name===item);
+ if(idx>=0){ addCoffee(idx); return; }
+
+ // Existing services can be used automatically when the name matches.
+ const si=services.findIndex(s=>s.name===item);
+ if(si>=0){ addServiceLine(si); return; }
+
+ // Additional coffee options are intentionally placeholders until their prices are provided.
+ showModal(`<h2>${item}</h2><p class="muted">${category} → ${item}</p><p>Цена и действие этой позиции будут добавлены, когда ты дашь мне цены.</p><div class="modal-actions"><button class="btn" onclick="closeModal()">Закрыть</button></div>`);
+}
+
+function drawServices(){
+ drawMainMenu();
+ fillSelects();
+}
+
 function drawBase(){
  $('baseTable').innerHTML='<tr><th>Наименование</th><th>Цена за гр/шт(руб)</th><th>В наличии</th><th>Себестоимость</th><th>Наклейки</th><th></th></tr>'+products.map((p,i)=>`<tr><td>${p.name}</td><td>${p.price} ₽</td><td class="${p.stock<=0?'bad':''}">${p.stock} ${p.unit}</td><td>${p.cost} ₽</td><td>${p.stickers||0}</td><td><button class="btn" onclick="editProduct(${i})">✏️</button> <button class="btn danger" onclick="deleteProduct(${i})">×</button></td></tr>`).join('');
 }
@@ -419,39 +446,6 @@ function drawReport(){
 function clearReport(){if(confirm('Удалить всю историю продаж?')){sales=[];save();draw()}}
 function draw(){fillSelects();drawServices();renderCheck();drawBase();drawReference();drawReport()}
 draw();
-renderMainMenu();
-
-const MAIN_MENU = {
-  "Кофе": ["Эспрессо","2х эспрессо","Американо","Капучино","Латте","Флэт Уайт","Бамбл","Эспрессо тоник","Айс латте","Дополнительно","Сиропы","Альтернативное молоко"],
-  "Коктейли": [],
-  "VIP+PS5": [],
-  "Чай россыпью": [],
-  "Чаепитие": [],
-  "Посуда": [],
-  "Чайная церемония": [],
-  "Подарочные наборы": []
-};
-
-function renderMainMenu(){
-  const host=document.getElementById("mainMenu");
-  if(!host)return;
-  host.innerHTML=`<h2>Продажи</h2><div class="tiles main-menu-grid">
-    ${Object.keys(MAIN_MENU).map((name,i)=>`<button class="tile main-menu-btn" onclick="openCategory(${i})"><b>${name}</b><small>${MAIN_MENU[name].length ? "Открыть ассортимент" : "Подпункты добавим позже"}</small></button>`).join("")}
-  </div>`;
-}
-function openCategory(i){
-  const name=Object.keys(MAIN_MENU)[i],items=MAIN_MENU[name];
-  if(!items.length){
-    showModal(`<h2>${name}</h2><p class="muted">Подпункты этого раздела добавим следующим шагом.</p><button class="btn" onclick="closeModal()">Назад</button>`);
-    return;
-  }
-  showModal(`<h2>${name}</h2><p class="muted">Выбери позицию:</p><div class="tiles">${items.map((x,j)=>`<button class="tile" onclick="selectMenuItem(${i},${j})"><b>${x}</b></button>`).join("")}</div><button class="btn" style="margin-top:12px" onclick="closeModal()">Назад</button>`);
-}
-function selectMenuItem(ci,ii){
-  const category=Object.keys(MAIN_MENU)[ci],item=MAIN_MENU[category][ii];
-  showModal(`<h2>${item}</h2><p class="muted"><b>${category}</b> → <b>${item}</b></p><p>Позиция выбрана. На следующем шаге привяжем цену и добавление в чек.</p><button class="btn primary" onclick="closeModal()">Понятно</button>`);
-}
-
 </script>
 </body>
 </html>
