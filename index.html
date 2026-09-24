@@ -1,0 +1,1207 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🐒 Чайная Лавочка — касса 022</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3eee7;color:#2d2722;font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+header{background:#332721;color:#fff;padding:14px 16px;font-size:19px;font-weight:800;position:sticky;top:0;z-index:20}
+header span{color:#e5b75c}
+nav{display:flex;gap:6px;padding:8px;background:#fff;overflow:auto;position:sticky;top:52px;z-index:19;border-bottom:1px solid #ddd}
+nav button{border:0;border-radius:10px;padding:10px 13px;background:#eee5da;font-weight:700;white-space:nowrap}
+nav button.active{background:#a52f2b;color:#fff}
+main{max-width:1200px;margin:auto;padding:12px}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}
+.card{background:#fffdf9;border:1px solid #dfd3c5;border-radius:15px;padding:14px;margin-bottom:12px}
+h2{margin:0 0 12px;font-size:20px}
+label{display:block;font-size:13px;font-weight:700;margin:8px 0 4px}
+input,select{width:100%;padding:10px;border:1px solid #cec1b1;border-radius:9px;background:#fff;font-size:16px}
+input[type="search"]{box-sizing:border-box;width:100%;height:52px;padding:12px 16px;border:2px solid #cec1b1;border-radius:14px;background:#fff;font-size:17px;color:#2d2722;outline:none;-webkit-appearance:none;appearance:none;box-shadow:none}
+input[type="search"]:focus{border-color:#a52f2b;box-shadow:0 0 0 3px rgba(165,47,43,.10)}
+input[type="search"]::placeholder{color:#a8a8a8;opacity:1}
+input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:auto;appearance:auto;cursor:pointer}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.btn{border:0;border-radius:9px;padding:10px 12px;font-weight:700;background:#eee5da;cursor:pointer}
+.primary{background:#a52f2b;color:#fff}.green{background:#2b8a4b;color:#fff}.danger{background:#b43b35;color:#fff}.base-actions{white-space:nowrap;display:flex;gap:4px;align-items:center}.base-actions .btn{padding:5px 7px;border-radius:7px;font-size:12px;line-height:1.1;white-space:nowrap;min-width:0}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{border:1px solid #d9cdbf;background:#fff;border-radius:10px;padding:11px;text-align:left;min-height:65px;font-weight:700;cursor:pointer}
+.tile small{display:block;color:#a52f2b;margin-top:5px}
+.muted{color:#766c64;font-size:13px}
+.hint{background:#faf0df;border-radius:10px;padding:10px;margin:8px 0;font-size:13px}
+.cartrow{display:grid;grid-template-columns:1fr auto;gap:8px;border-bottom:1px solid #ddd5cb;padding:9px 0}
+.total{font-size:28px;font-weight:900;margin:15px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px;border-bottom:1px solid #ddd5cb;text-align:left;vertical-align:top}
+th{background:#eee7dd}
+.scroll{overflow:auto;max-height:65vh}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:#fff;border:1px solid #ddd1c2;border-radius:10px;padding:12px}
+.stat b{display:block;font-size:20px;margin-top:5px}
+.hidden{display:none}
+.bad{color:#b3261e;font-weight:800}
+.ok{color:#267a42;font-weight:800}
+.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}
+.modal.hidden{display:none}.modalbox{background:#fffdf9;border-radius:16px;padding:18px;width:min(620px,100%);max-height:90vh;overflow:auto;box-shadow:0 15px 50px #0006}.modalbox h2{margin-top:0}.modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.modal-actions .btn{flex:1;min-width:120px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.row3{grid-template-columns:1fr 1fr}}
+
+.main-menu-grid{grid-template-columns:1fr !important;}
+.main-menu-btn{min-height:78px;font-size:18px;}
+.main-menu-btn small{display:block;margin-top:6px;}
+@media(max-width:520px){.main-menu-grid{grid-template-columns:1fr 1fr}.main-menu-btn{min-height:72px;font-size:16px;}}
+.main-menu-btn{min-height:78px;font-size:18px}.main-menu-btn small{display:block;margin-top:6px}.category-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}.category-head h2{margin:0}.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tile{padding:14px;border:1px solid #ddd;border-radius:14px;background:#fff;text-align:left}.tile small{display:block;margin-top:5px}@media(max-width:600px){.tiles{grid-template-columns:1fr 1fr}}
+</style>
+
+<style id="vertical-main-menu">
+#mainMenu .grid, #mainMenu .tiles, #mainMenu .main-menu-grid,
+#mainMenu .menu-grid, #mainMenu .menu-buttons {
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+}
+#mainMenu button, #mainMenu .btn, #mainMenu .tile, #mainMenu .menu-item {
+  width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+}
+</style>
+<style>
+.toast{position:fixed;left:50%;top:20px;transform:translateX(-50%);z-index:9999;background:#332721;color:#fff;padding:14px 18px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.25);max-width:calc(100% - 32px);width:max-content;font-size:15px;line-height:1.4}.toast b{color:#e5b75c}</style>
+</head>
+<body>
+<header>🐒 Чайная <span>Лавочка</span> — касса 022</header>
+
+<nav>
+<button class="active" onclick="tab('sales',this)">🧾 Продажи</button>
+<button onclick="tab('base',this)">📦 База</button>
+<button onclick="tab('receive',this)">📥 Приёмка</button>
+<button onclick="tab('report',this)">📊 Отчёт</button>
+<button onclick="tab('reference',this)">⚙️ Справочник</button>
+<button onclick="tab('instruction',this)">❓ Инструкция</button>
+</nav>
+
+<main>
+
+<section id="sales">
+<div class="grid">
+<div>
+<div class="card">
+<h2>🧾 Продажи — выберите направление</h2>
+<div id="mainMenu" class="main-menu-grid">
+<button class="tile main-menu-btn" onclick="openMainCategory(0)"><b>☕ Кофе</b><small>Открыть ассортимент</small></button>
+<button class="tile main-menu-btn" onclick="openMainCategory(1)"><b>🍹 Коктейли</b><small>Открыть раздел</small></button>
+<button class="tile main-menu-btn" onclick="openMainCategory(2)"><b>🎮 VIP+PS5</b><small>Открыть раздел</small></button>
+<button class="tile main-menu-btn" onclick="openMainCategory(3)"><b>🍵 Чай россыпью</b><small>Открыть раздел</small></button>
+<button class="tile main-menu-btn" onclick="openMainCategory(4)"><b>🫖 Чаепитие</b><small>Открыть раздел</small></button>
+<button class="tile main-menu-btn" onclick="openMainCategory(5)"><b>🏺 Посуда</b><small>Открыть раздел</small></button>
+<button class="tile main-menu-btn" onclick="openMainCategory(6)"><b>🏮 Чайная церемония</b><small>Открыть раздел</small></button>
+<button class="tile main-menu-btn" onclick="openMainCategory(7)"><b>🎁 Подарочные наборы</b><small>Открыть раздел</small></button>
+</div>
+<div id="categoryMenu" class="hidden"></div>
+<div class="hint">Выбери направление → выбери позицию. Позиция автоматически добавится в текущий чек.</div>
+</div>
+
+<div class="card">
+<h2>Текущий чек</h2>
+<div id="check"></div>
+<div class="total">Итого: <span id="total">0</span> ₽</div>
+<button class="btn green" style="width:100%;font-size:17px" onclick="sell()">✓ ПРОДАТЬ</button>
+<button class="btn danger" style="width:100%;margin-top:8px" onclick="clearCheck()">Очистить чек</button>
+</div>
+</div>
+</section>
+
+<section id="base" class="hidden">
+<div class="card">
+<h2>📦 База</h2>
+<div class="tiles" style="grid-template-columns:1fr 1fr">
+<button id="baseTeaBtn" class="btn primary" onclick="showBaseSection('tea')">🍵 База чая</button>
+<button id="baseWareBtn" class="btn" onclick="showBaseSection('ware')">🏺 База посуды</button>
+</div>
+</div>
+<div id="baseTeaSection" class="card">
+<h2>🍵 База чая</h2>
+<div class="row2"><div><label>🔎 Поиск по названию</label><input id="baseTeaSearch" type="search" oninput="drawBase()" placeholder="Введите название чая…"></div><div style="display:flex;align-items:end"><button class="btn primary" style="width:100%" onclick="showNewProduct('tea')">＋ Новый чай</button></div></div>
+<div class="scroll" style="margin-top:10px"><table id="baseTeaTable"></table></div>
+</div>
+<div id="baseWareSection" class="card hidden">
+<h2>🏺 База посуды</h2>
+<div class="row2"><div><label>🔎 Поиск по названию</label><input id="baseWareSearch" type="search" oninput="drawBase()" placeholder="Введите название товара…"></div><div style="display:flex;align-items:end"><button class="btn primary" style="width:100%" onclick="showNewProduct('ware')">＋ Новая посуда</button></div></div>
+<div class="scroll" style="margin-top:10px"><table id="baseWareTable"></table></div>
+</div>
+<div id="newProduct" class="card hidden">
+<h2 id="newProductTitle">Новый товар</h2><input id="newKind" type="hidden" value="tea">
+<div class="row2"><div><label>Наименование</label><input id="newName"></div><div><label>Единица</label><select id="newUnit"><option value="гр">гр</option><option value="шт">шт</option></select></div></div>
+<div id="newWareCategoryWrap" class="hidden"><label>Категория посуды</label><select id="newWareCategory"></select></div>
+<div class="row3"><div><label>Цена продажи за гр/шт (руб)</label><input id="newPrice" type="number" step=".01"></div><div><label>В наличии</label><input id="newStock" type="number" step=".01"></div><div><label>Цена закупки за гр/шт</label><input id="newCost" type="number" step=".01"></div></div>
+<button class="btn primary" style="margin-top:10px" onclick="createProduct()">Сохранить</button><button class="btn" style="margin-top:8px" onclick="$('newProduct').classList.add('hidden')">Отмена</button>
+</div>
+</section>
+
+
+<section id="receive" class="hidden">
+<div class="card">
+<h2>📥 Приёмка товара</h2>
+<p class="muted">Выберите, какой товар принимаете.</p>
+<div class="tiles">
+<button class="tile" onclick="showReceiveType('tea')"><b>🍵 Чай</b><small>Добавить чай в Базу и Продажи → Чай россыпью</small></button>
+<button class="tile" onclick="showReceiveType('coffee')"><b>☕ Кофе</b><small>Добавить кофе в Базу</small></button><button class="tile" onclick="showReceiveType('ware')"><b>🏺 Посуда</b><small>Добавить в Базу посуды</small></button>
+</div>
+</div>
+
+<div id="receiveTeaPanel" class="card hidden">
+<h2>🍵 Новый чай</h2>
+<label>Название чая</label>
+<input id="receiveTeaName" placeholder="Например: Да Хун Пао">
+<label>Количество грамм</label>
+<input id="receiveTeaQty" type="number" min="0.01" step="0.01" placeholder="500">
+<label>Себестоимость за грамм</label>
+<input id="receiveTeaCost" type="number" min="0" step="0.01" placeholder="3">
+<label>Цена продажи за грамм</label>
+<input id="receiveTeaPrice" type="number" min="0" step="0.01" placeholder="10">
+<button class="btn primary" style="width:100%;margin-top:10px" onclick="createTeaFromReceive()">＋ Принять чай</button>
+</div>
+
+<div id="receiveWarePanel" class="card hidden">
+<h2>🏺 Новая посуда</h2><label>Название</label><input id="receiveWareName" placeholder="Например: Гайвань 150 мл">
+<label>Категория</label><select id="receiveWareCategory"></select><label>Количество</label><input id="receiveWareQty" type="number" min="0.01" step="0.01">
+<label>Цена закупки за шт</label><input id="receiveWareCost" type="number" min="0" step="0.01"><label>Цена продажи за шт</label><input id="receiveWarePrice" type="number" min="0" step="0.01">
+<button class="btn primary" style="width:100%;margin-top:10px" onclick="createWareFromReceive()">＋ Принять посуду</button></div>
+
+<div id="receiveCoffeePanel" class="card hidden">
+<h2>☕ Новый кофе</h2>
+<label>Название кофе</label>
+<input id="receiveCoffeeName" placeholder="Например: Бразилия">
+<label>Количество</label>
+<input id="receiveCoffeeQty" type="number" min="0.01" step="0.01" placeholder="1000">
+<label>Себестоимость за единицу</label>
+<input id="receiveCoffeeCost" type="number" min="0" step="0.01" placeholder="10">
+<label>Цена продажи за единицу</label>
+<input id="receiveCoffeePrice" type="number" min="0" step="0.01" placeholder="25">
+<button class="btn primary" style="width:100%;margin-top:10px" onclick="createCoffeeFromReceive()">＋ Принять кофе</button>
+</div>
+</section>
+
+
+<section id="report" class="hidden">
+<div class="card">
+<h2>📊 Отчёт — как в Excel</h2>
+<div id="stats" class="stats"></div>
+</div>
+<div class="card">
+<div class="scroll"><table id="reportTable"></table></div>
+</div>
+<button class="btn danger" onclick="clearReport()">Очистить отчёт</button>
+</section>
+
+<section id="reference" class="hidden">
+<div class="card">
+<h2>⚙️ Справочник услуг</h2>
+<div class="scroll"><table id="serviceTable"></table></div>
+<h3>Добавить услугу</h3>
+<div class="row2">
+<div><label>Услуга</label><input id="serviceName"></div>
+<div><label>Цена услуги</label><input id="servicePrice" type="number" step=".01"></div>
+</div>
+<div class="row2">
+<div><label>Тип расчёта</label><select id="serviceType"><option>вес</option><option>смешанный</option><option>штуки</option><option>аренда</option><option>деньги</option></select></div>
+<div><label>Единица</label><select id="serviceUnit"><option>гр</option><option>шт</option><option>час</option><option>руб</option></select></div>
+</div>
+<button class="btn primary" style="margin-top:10px" onclick="addService()">＋ Добавить услугу</button>
+</div>
+<div class="card"><h2>☕ Кофе</h2><table id="coffeeTable"></table></div>
+<div class="card"><h2>🎮 VIP</h2><table id="vipTable"></table></div>
+</section>
+
+<section id="instruction" class="hidden">
+<div class="card">
+<h2>❓ Инструкция</h2>
+<h3>Продажа</h3>
+<p>1. В «Продажах» выбери нужное направление.</p>
+<p>2. Выбери позицию — она автоматически попадёт в текущий чек.</p>
+<p>3. Для позиций с количеством/граммами программа откроет окно ввода.</p>
+<p>4. Проверь итог и нажми «ПРОДАТЬ».</p>
+<h3>Важно</h3>
+<p>Товар списывается со склада только после нажатия «ПРОДАТЬ». Услуги склад не уменьшают.</p>
+</div>
+</section>
+
+<div id="modal" class="modal hidden"><div id="modalBox" class="modalbox"></div></div>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const money=x=>Math.round((Number(x)||0)*100)/100;
+function showToast(title,html){
+  let t=document.getElementById("globalToast");
+  if(!t){
+    t=document.createElement("div"); t.id="globalToast"; t.className="toast";
+    document.body.appendChild(t);
+  }
+  t.innerHTML=`<b>${title}</b><br>${html}`;
+  t.style.display="block";
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer=setTimeout(()=>{t.style.display="none"},3200);
+}
+function loadJSON(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(e){return fallback}}
+
+const defaultProducts=[
+["1001 ночь",5,580,2],["Мастер и Маргарита",5,200,2],["Изысканный вкус",5,280,2],["Сочный грейпфрукт",5,310,2],
+["Загадка Клеопатры",5,520,2],["Дамский угодник",4,250,1.6],["Божественный нектар",4,600,1.6],
+["Утро Клеопатры",5,675,2],["Чай молодости и красоты",7,640,3],["Здоровое пищеварение",5,0,2],
+["Вишневый пунш",4,150,1.6],["Клубничный зефир",4,290,1.6],["Красный сарафан",6,150,2.4],["Глинтвейн",6,240,2.4],
+["Масала",5,314,2],["Пуэр",1,0,1]
+].map(x=>({name:x[0],price:x[1],stock:x[2],cost:x[3],stickers:0,unit:"гр"}));
+
+const defaultServices=[
+["Чай россыпью","вес","гр",0],["Чай в стаканчике проливом","смешанный","шт",130],
+["Чай в стаканчике по черному","смешанный","шт",80],["Чайная церемония Пин ча","смешанный","шт",150],
+["Вип комната","аренда","час",0],["Кофе","штуки","шт",0],["Товар как есть","штуки","шт",0],
+["Упаковка или прочее","деньги","руб",0]
+].map(x=>({name:x[0],type:x[1],unit:x[2],price:x[3]}));
+
+let products=loadJSON("chaiExcelProducts",defaultProducts);
+let tableware=loadJSON("chaiExcelTableware",null)||[];
+const TABLEWARE_CATEGORIES=["Пиала","Гайвань","Чайник","Фигурка","Чабань","Коврик","Благовоние","Набор","Чахай"];
+if(!localStorage.getItem("chaiExcelTableware")){ const old=products.filter(p=>p.unit!=="гр").map(p=>({...p,category:p.category||"Набор"})); tableware=old; products=products.filter(p=>p.unit==="гр"); localStorage.setItem("chaiExcelProducts",JSON.stringify(products)); localStorage.setItem("chaiExcelTableware",JSON.stringify(tableware)); }
+let services=loadJSON("chaiExcelServices",defaultServices);
+let coffee=loadJSON("chaiExcelCoffee",null)||[
+{name:"Эспрессо",unit:"шт",price:80},{name:"Латте",unit:"шт",price:140},{name:"Капучино",unit:"шт",price:140},{name:"Американо",unit:"шт",price:110}
+];
+// Новые позиции кофе добавляются в справочник с нулевой ценой, если цены ещё не заданы.
+["2х эспрессо","Флэт Уайт","Бамбл","Эспрессо тоник","Айс латте","Сиропы","Альтернативное молоко"].forEach(name=>{if(!coffee.some(c=>c.name===name))coffee.push({name,unit:"шт",price:0});});
+let vip=loadJSON("chaiExcelVip",null)||[
+{name:"Игровой (PS4)",unit:"час",price:250},{name:"Чайный ",unit:"час",price:350},{name:"Чайный игроман",unit:"час",price:600},{name:"Игровой (PS5)",unit:"час",price:350}
+];
+let sales=loadJSON("chaiExcelSales",[]);
+let check=[];
+
+function save(){
+ localStorage.chaiExcelProducts=JSON.stringify(products);
+ localStorage.chaiExcelTableware=JSON.stringify(tableware);
+ localStorage.chaiExcelServices=JSON.stringify(services);
+ localStorage.chaiExcelCoffee=JSON.stringify(coffee);
+ localStorage.chaiExcelVip=JSON.stringify(vip);
+ localStorage.chaiExcelSales=JSON.stringify(sales);
+}
+function tab(id,b){
+ ["sales","base","receive","report","reference","instruction"].forEach(x=>$(x).classList.toggle("hidden",x!==id));
+ document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");draw();
+}
+function productOptions(){return products.map((p,i)=>`<option value="${i}">${p.name} — ${p.price} ₽/${p.unit}</option>`).join("")}
+function fillSelects(){
+ const productSelect=$("productSelect");
+ const receiveProduct=$("receiveProduct");
+ if(productSelect) productSelect.innerHTML=productOptions();
+ if(receiveProduct) receiveProduct.innerHTML=productOptions();
+}
+let editingSaleIndex=null;
+let editingSaleItems=null;
+
+function showModal(html){
+  $("modalBox").innerHTML=html;
+  $("modal").classList.remove("hidden");
+}
+function closeModal(){ $("modal").classList.add("hidden"); $("modalBox").innerHTML=""; }
+$("modal").addEventListener("click",e=>{if(e.target===$("modal"))closeModal()});
+
+function addServiceLine(i){
+ const s=services[i];
+ if(!s)return;
+ if(s.type==="смешанный" && /проливом/i.test(s.name)){
+   showTeaForService(i);
+   return;
+ }
+ let qty=1;
+ if(s.unit==="руб"){
+   showModal(`<h2>${s.name}</h2><label>Сумма</label><input id="modalQty" type="number" min="0.01" step="0.01" value="100"><div class="modal-actions"><button class="btn primary" onclick="saveServiceModal(${i})">Добавить</button><button class="btn" onclick="closeModal()">Отмена</button></div>`); return;
+ }
+ if(s.unit==="час"){
+   showModal(`<h2>${s.name}</h2><label>Количество часов</label><input id="modalQty" type="number" min="0.01" step="0.01" value="1"><div class="modal-actions"><button class="btn primary" onclick="saveServiceModal(${i})">Добавить</button><button class="btn" onclick="closeModal()">Отмена</button></div>`); return;
+ }
+ check.push({kind:"service",service:s.name,product:"",qty,unit:s.unit,price:s.price,total:money(s.price*qty),cost:0,stickers:0,discount:0});
+ renderCheck();
+}
+function saveServiceModal(i){
+ const s=services[i],qty=Number($("modalQty").value)||0;if(!qty)return;
+ check.push({kind:"service",service:s.name,product:"",qty,unit:s.unit,price:s.price,total:money(s.price*qty),cost:0,stickers:0,discount:0});
+ closeModal();renderCheck();
+}
+function showTeaForService(serviceIndex){
+ const s=services[serviceIndex];
+ const teas=products.map((p,i)=>({p,i})).filter(x=>x.p.unit==="гр");
+ showModal(`<h2>${s.name}</h2><p class="muted">Выбери чай. После этого укажешь граммы.</p><div class="tiles">${teas.map(x=>`<button class="tile" onclick="showTeaAmount(${serviceIndex},${x.i})">${x.p.name}<small>${x.p.price} ₽/г · остаток ${x.p.stock} г</small></button>`).join("")}</div><div class="modal-actions"><button class="btn" onclick="closeModal()">Отмена</button></div>`);
+}
+function showTeaAmount(serviceIndex,productIndex){
+ const s=services[serviceIndex],p=products[productIndex];
+ showModal(`<h2>${s.name}</h2><div class="hint"><b>${p.name}</b><br>${s.price} ₽ услуга + ${p.price} ₽/г чай<br>Остаток: ${p.stock} г</div><label>Граммы</label><input id="teaModalQty" type="number" min="0.01" step="0.01" value="10"><label>Скидка %</label><input id="teaModalDisc" type="number" min="0" max="100" step="0.01" value="0"><div class="modal-actions"><button class="btn primary" onclick="addTeaWithService(${serviceIndex},${productIndex})">Добавить в чек</button><button class="btn" onclick="showTeaForService(${serviceIndex})">← Другой чай</button></div>`);
+}
+function addTeaWithService(serviceIndex,productIndex){
+ const s=services[serviceIndex],p=products[productIndex],qty=Number($("teaModalQty").value)||0,disc=Number($("teaModalDisc").value)||0;
+ if(!qty)return alert("Укажи граммы");
+ if(p.stock<qty)return alert("Недостаточно остатка: "+p.name+" — "+p.stock+" г");
+ const teaTotal=money(p.price*qty*(1-disc/100));
+ const total=money(s.price+teaTotal);
+ check.push({kind:"mixed",service:s.name,product:p.name,productIndex,qty,unit:"гр",price:p.price,servicePrice:s.price,total,cost:money(p.cost*qty),stickers:0,discount:disc,discountRub:money(p.price*qty*disc/100)});
+ closeModal();renderCheck();
+ showToast('🍵 Чай добавлен в чек',`${esc(p.name)} · <b>${qty} г</b> · услуга ${money(s.price)} ₽ · чай ${money(teaTotal)} ₽ · итого <b>${total} ₽</b>`);
+}
+function addCoffee(i){
+ const c=coffee[i];
+ check.push({kind:"coffee",service:"Кофе",product:c.name,qty:1,unit:c.unit,price:c.price,total:money(c.price),cost:0,stickers:0,discount:0});
+ renderCheck();
+ showToast('☕ Добавлено в чек',`${esc(c.name)} · <b>${money(c.price)} ₽</b>`);
+}
+function addVip(i){
+ const v=vip[i];
+ showModal(`<h2>${v.name}</h2><label>Количество часов</label><input id="modalQty" type="number" min="0.01" step="0.01" value="1"><div class="modal-actions"><button class="btn primary" onclick="saveVipModal(${i})">Добавить</button><button class="btn" onclick="closeModal()">Отмена</button></div>`);
+}
+function saveVipModal(i){const v=vip[i],qty=Number($("modalQty").value)||0;if(!qty)return;const total=money(v.price*qty);check.push({kind:"vip",service:"Вип комната",product:v.name,qty,unit:v.unit,price:v.price,total,cost:0,stickers:0,discount:0});closeModal();renderCheck();showToast('🎮 Добавлено в чек',`${esc(v.name)} · <b>${qty} ${v.unit}</b> · ${money(v.price)} ₽/${v.unit} · итого <b>${total} ₽</b>`)}
+function addProductLine(){
+ const i=+$('productSelect').value,p=products[i],qty=Number($('productQty').value),disc=Number($('productDiscount').value)||0,stick=Number($('productStickers').value)||0;
+ if(!qty)return alert('Введите количество'); if(p.stock<qty)return alert('Недостаточно товара на складе. Остаток: '+p.stock+' '+p.unit);
+ let gross=p.price*qty,total=money(gross*(1-disc/100));
+ check.push({kind:'product',service:'Чай россыпью',product:p.name,productIndex:i,qty,unit:p.unit,price:p.price,total,cost:money(p.cost*qty),stickers:0,discount:disc,discountRub:money(p.price*qty*disc/100)}); renderCheck(); showToast('🍵 Чай добавлен в чек',`${esc(p.name)} · <b>${qty} г</b> · ${money(p.price)} ₽/г · итого <b>${total} ₽</b>`);
+}
+function quickTea(i){$('productSelect').value=i;$('productQty').value=10;addProductLine()}
+function editCurrentItem(i){
+ const x=check[i]; if(!x)return;
+ const teaKinds=['teaBar','teaPour','teaPourPremium','teaPot','teaBrew'];
+ if(teaKinds.includes(x.kind)){
+   const opts=products.filter(p=>p && p.unit==='гр').map((p,j)=>{const pi=products.indexOf(p);return `<option value="${pi}">${p.name} — ${money(p.price)} ₽/г · остаток ${money(p.stock)} г</option>`}).join('');
+   const serviceOptions=[
+    ['teaBar','Чай за барной стойкой',200],['teaPour','Стакан проливом',150],['teaPourPremium','Стакан проливом премиум',300],
+    ['teaPot','Чайник чая',250],['teaBrewLuyu','По Лу Юю',700],['teaBrewEnergy','Пуэр на энергетике',600],
+    ['teaBrewPomegranate','Дянь Хун на гранатовом соке',600],['teaBrewCherry','Пуэр на вишневом соке',500]
+   ];
+   const currentService=x.editType||x.kind;
+   showModal(`<h2>✏️ Редактирование позиции</h2>
+    <label>Услуга</label><select id="editTeaService">${serviceOptions.map(a=>`<option value="${a[0]}" data-price="${a[2]}">${a[1]} — ${a[2]} ₽</option>`).join('')}</select>
+    <label>Поиск чая</label><input id="editTeaSearch" type="search" placeholder="Введите название чая…" oninput="filterEditTea015()">
+    <label>Чай</label><select id="editTea">${opts}</select>
+    <div id="editPeopleWrap"><label>Количество человек</label><input id="editPeople" type="number" min="1" step="1" value="${x.people||1}"></div>
+    <label>Количество грамм</label><input id="editQty" type="number" min="0.01" step="0.01" value="${x.teaGrams||x.qty||10}">
+    <label>Цена услуги</label><input id="editServicePrice" type="number" min="0" step="1" value="${x.price||200}">
+    <div class="modal-actions"><button class="btn primary" onclick="saveCurrentTeaParty015(${i})">Сохранить</button><button class="btn" onclick="closeModal()">Отмена</button></div>`);
+   const sel=$('editTeaService');
+   const match=[...sel.options].find(o=>o.value===currentService || (x.service&&o.textContent.startsWith(x.service+' —')));
+   if(match)sel.value=match.value;
+   $('editTea').value=String(x.productIndex);
+   updateEditTeaParty015();
+   return;
+ }
+ if(x.kind==='cocktail'){
+   showModal(`<h2>✏️ Редактирование коктейля</h2><label>Коктейль</label><input id="editCocktailName" value="${String(x.product||'').replace(/"/g,'&quot;')}"><label>Объём</label><select id="editCocktailVolume"><option value="0.3">0,3 л — 150 ₽</option><option value="0.5">0,5 л — 250 ₽</option></select><label>Цена</label><input id="editSimplePrice" type="number" min="0" step="1" value="${x.price||0}"><div class="modal-actions"><button class="btn primary" onclick="saveCurrentCocktail015(${i})">Сохранить</button><button class="btn" onclick="closeModal()">Отмена</button></div>`);
+   $('editCocktailVolume').value=x.volume; return;
+ }
+ if(x.kind==='product'||x.kind==='mixed'){
+  const opts=products.map((p,j)=>`<option value="${j}">${p.name} — ${money(p.price)} ₽/г</option>`).join('');
+  showModal(`<h2>✏️ Изменить позицию</h2><label>Чай</label><select id="editTea">${opts}</select><label>Граммы</label><input id="editQty" type="number" min="0.01" step="0.01" value="${x.qty}"><label>Цена продажи за грамм</label><input id="editSimplePrice" type="number" min="0" step="0.01" value="${x.price||0}"><label>Скидка %</label><input id="editDisc" type="number" min="0" max="100" step="0.01" value="${x.discount||0}"><div class="modal-actions"><button class="btn primary" onclick="saveCurrentTea(${i})">Сохранить</button><button class="btn" onclick="closeModal()">Отмена</button></div>`);
+  $('editTea').value=String(x.productIndex); return;
+ }
+ showModal(`<h2>✏️ Изменить позицию</h2><label>Название</label><input id="editSimpleName" value="${String(x.product||x.service||'').replace(/"/g,'&quot;')}"><label>Количество</label><input id="editQtySimple" type="number" min="0.01" step="0.01" value="${x.qty||1}"><label>Цена</label><input id="editSimplePrice" type="number" min="0" step="0.01" value="${x.price||0}"><div class="modal-actions"><button class="btn primary" onclick="saveCurrentSimple(${i})">Сохранить</button><button class="btn" onclick="closeModal()">Отмена</button></div>`);
+}
+function filterEditTea015(){
+ const q=String($('editTeaSearch')?.value||'').trim().toLowerCase(), sel=$('editTea'); if(!sel)return;
+ const old=sel.value; sel.innerHTML=products.map((p,j)=>({p,j})).filter(x=>x.p&&x.p.unit==='гр'&&(!q||x.p.name.toLowerCase().includes(q))).map(x=>`<option value="${x.j}">${x.p.name} — ${money(x.p.price)} ₽/г · остаток ${money(x.p.stock)} г</option>`).join('');
+ if([...sel.options].some(o=>o.value===old))sel.value=old;
+}
+function updateEditTeaParty015(){
+ const kind=$('editTeaService')?.value; if(!kind)return;
+ const price=Number($('editTeaService').selectedOptions[0]?.dataset.price||0);
+ $('editServicePrice').value=price;
+ const wrap=$('editPeopleWrap'); if(wrap)wrap.style.display=kind==='teaBar'?'block':'none';
+}
+function saveCurrentTeaParty015(i){
+ const x=check[i], pi=Number($('editTea').value), p=products[pi], q=Number($('editQty').value)||0, people=Math.max(1,Number($('editPeople')?.value)||1), kind=$('editTeaService').value, price=Number($('editServicePrice').value)||0;
+ if(!p||q<=0||price<0)return alert('Заполните все поля');
+ const oldP=x.productIndex!=null?products[x.productIndex]:null, oldG=Number(x.teaGrams||x.qty||0);
+ if(x.stockReserved && oldP) oldP.stock=money(Number(oldP.stock)+oldG);
+ if(p.stock<q){if(x.stockReserved&&oldP)oldP.stock=money(Number(oldP.stock)-oldG);return alert('Недостаточно остатка: '+p.name+' — '+money(p.stock)+' г');}
+ p.stock=money(Number(p.stock)-q);
+ x.kind=kind.startsWith('teaBrew')?'teaBrew':kind; x.editType=kind; x.service=kind==='teaBar'?'Чай за барной стойкой':kind==='teaPour'?'Стакан проливом':kind==='teaPourPremium'?'Стакан проливом премиум':kind==='teaPot'?'Чайник чая':kind==='teaBrewLuyu'?'По Лу Юю':kind==='teaBrewEnergy'?'Пуэр на энергетике':kind==='teaBrewPomegranate'?'Дянь Хун на гранатовом соке':'Пуэр на вишневом соке';
+ x.product=p.name;x.productIndex=pi;x.qty=q;x.teaGrams=q;x.people=kind==='teaBar'?people:1;x.price=price;x.teaUnitPrice=Number(p.price||0);x.teaValue=money(Number(p.price||0)*q);x.serviceValue=money(price*(kind==='teaBar'?people:1));x.total=money(x.serviceValue+(['teaBar','teaPot','teaBrewLuyu','teaBrewPomegranate'].includes(kind)?x.teaValue:0));x.stockReserved=true;x.showTeaInCheck=!['teaPour','teaPourPremium','teaBrewEnergy','teaBrewCherry'].includes(kind);x.teaInCheck=['teaBar','teaPot','teaBrewLuyu','teaBrewPomegranate'].includes(kind);
+ save();closeModal();renderCheck();
+}
+function saveCurrentCocktail015(i){const x=check[i],name=$('editCocktailName').value.trim(),v=$('editCocktailVolume').value,price=Number($('editSimplePrice').value)||0;if(!name||price<0)return;x.product=name;x.volume=v;x.price=price;x.total=price;closeModal();renderCheck()}
+function renderCheck(){
+ $('check').innerHTML=check.length?check.map((x,i)=>`<div class="cartrow"><div><b>${x.service}</b><br>${x.product||''}<div class="muted">${x.kind==='cocktail'?`${x.volume.replace('.',',')} л · ${x.price} ₽`:x.kind==='mixed'?`${x.qty} ${x.unit} × ${x.price} ₽ + ${x.servicePrice} ₽ услуга`: `${x.qty} ${x.unit} × ${x.price} ₽`}${x.discount?` · скидка ${x.discount}%`:''}${x.stickers?` · наклеек ${x.stickers}`:''}</div></div><div><b>${x.total} ₽</b><br><button class="btn" onclick="editCurrentItem(${i})">✏️</button> <button class="btn danger" onclick="check.splice(${i},1);renderCheck()">×</button></div></div>`).join(''):"<div class='muted'>Чек пуст</div>";
+ $('total').textContent=money(check.reduce((a,x)=>a+x.total,0));
+}
+function clearCheck(){check=[];renderCheck()}
+function sell(){
+ if(!check.length)return alert('Чек пуст');
+ for(const x of check)if(x.kind==='product'||x.kind==='mixed'){const p=products[x.productIndex];if(!p||p.stock<x.qty)return alert('Недостаточно остатка: '+(p?p.name:'чай'))}
+ for(const x of check)if(x.kind==='product'||x.kind==='mixed'){const p=products[x.productIndex];p.stock-=x.qty;p.stickers=Math.max(0,(p.stickers||0)-x.stickers)}
+ const total=money(check.reduce((a,x)=>a+x.total,0)); sales.unshift({date:new Date().toISOString(),items:JSON.parse(JSON.stringify(check)),total}); save();alert('Продажа проведена на '+total+' ₽');check=[];draw();
+}
+function drawServices(){
+ const a=$("serviceTiles"); if(a)a.innerHTML=services.map((s,i)=>`<button class="tile" onclick="addServiceLine(${i})">${s.name}<small>${s.price} ₽ / ${s.unit}</small></button>`).join('');
+ const b=$("teaTiles"); if(b)b.innerHTML=products.filter(p=>p.unit==='гр').map(p=>{let i=products.indexOf(p);return `<button class="tile" onclick="quickTea(${i})">${p.name}<small>${p.price} ₽/г · ${p.stock} г</small></button>`}).join('');
+ const c=$("coffeeTiles"); if(c)c.innerHTML=coffee.map((x,i)=>`<button class="tile" onclick="addCoffee(${i})">${x.name}<small>${x.price} ₽</small></button>`).join('');
+ const d=$("vipTiles"); if(d)d.innerHTML=vip.map((v,i)=>`<button class="tile" onclick="addVip(${i})">${v.name}<small>${v.price} ₽/час</small></button>`).join('');
+}
+
+function showBaseSection(kind){
+  $("baseTeaSection").classList.toggle("hidden",kind!=="tea"); $("baseWareSection").classList.toggle("hidden",kind!=="ware");
+  $("baseTeaBtn").classList.toggle("primary",kind==='tea'); $("baseWareBtn").classList.toggle("primary",kind==='ware'); drawBase();
+}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function drawBase(){
+ const tq=String($("baseTeaSearch")?.value||'').trim().toLowerCase(), wq=String($("baseWareSearch")?.value||'').trim().toLowerCase();
+ const teas=products.map((p,i)=>({p,i})).filter(x=>!tq||String(x.p.name).toLowerCase().includes(tq));
+ const wares=tableware.map((p,i)=>({p,i})).filter(x=>!wq||String(x.p.name).toLowerCase().includes(wq));
+ $("baseTeaTable").innerHTML='<tr><th>Название</th><th>Цена закупки</th><th>Цена продажи</th><th>Остаток</th><th>Действия</th></tr>'+teas.map(x=>`<tr><td><b>${esc(x.p.name)}</b></td><td>${money(x.p.cost)} ₽/г</td><td>${money(x.p.price)} ₽/г</td><td>${money(x.p.stock)} г</td><td><div class="base-actions"><button class="btn" onclick="editProduct(${x.i})">✏️ Изм.</button><button class="btn danger" onclick="deleteProduct(${x.i})">🗑️ Удал.</button></div></td></tr>`).join('');
+ $("baseWareTable").innerHTML='<tr><th>Название</th><th>Категория</th><th>Цена закупки</th><th>Цена продажи</th><th>Остаток</th><th>Действия</th></tr>'+wares.map(x=>`<tr><td><b>${esc(x.p.name)}</b></td><td>${esc(x.p.category||'Набор')}</td><td>${money(x.p.cost)} ₽/шт</td><td>${money(x.p.price)} ₽/шт</td><td>${money(x.p.stock)} шт</td><td><div class="base-actions"><button class="btn" onclick="editTableware(${x.i})">✏️ Изм.</button><button class="btn danger" onclick="deleteTableware(${x.i})">🗑️ Удал.</button></div></td></tr>`).join('');
+}
+function showNewProduct(kind='tea'){ $("newKind").value=kind; $("newProduct").classList.remove('hidden'); $("newProductTitle").textContent=kind==='tea'?'🍵 Новый чай':'🏺 Новая посуда'; $("newUnit").value=kind==='tea'?'гр':'шт'; $("newWareCategoryWrap").classList.toggle('hidden',kind!=='ware'); fillTablewareCategorySelects(); }
+function createProduct(){const kind=$("newKind").value,n=$("newName").value.trim();if(!n)return alert('Введите название');const price=Number($("newPrice").value)||0,stock=Number($("newStock").value)||0,cost=Number($("newCost").value)||0;if(kind==='tea')products.push({name:n,unit:'гр',price,stock,cost,stickers:0});else tableware.push({name:n,unit:'шт',price,stock,cost,category:$("newWareCategory").value||'Набор'});save();$("newProduct").classList.add('hidden');["newName","newPrice","newStock","newCost"].forEach(id=>$(id).value='');draw();}
+function editProduct(i){const p=products[i];showModal(`<h2>Редактирование чая</h2><label>Наименование</label><input id="epName" value="${esc(p.name)}"><label>Цена закупочная за грамм</label><input id="epCost" type="number" step=".01" value="${p.cost}"><label>Цена продажная за грамм</label><input id="epPrice" type="number" step=".01" value="${p.price}"><label>Остаток</label><input id="epStock" type="number" step=".01" value="${p.stock}"><button class="btn primary" style="margin-top:10px;width:100%" onclick="saveProduct(${i})">Сохранить</button>`);}
+function saveProduct(i){const p=products[i];p.name=$("epName").value.trim()||p.name;p.cost=Number($("epCost").value)||0;p.price=Number($("epPrice").value)||0;p.stock=Number($("epStock").value)||0;save();closeModal();draw();}
+function deleteProduct(i){if(confirm('Удалить «'+products[i].name+'»?')){products.splice(i,1);save();draw();}}
+function fillTablewareCategorySelects(){const html=TABLEWARE_CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join('');['newWareCategory','receiveWareCategory'].forEach(id=>{if($(id)){const old=$(id).value;$(id).innerHTML=html;if(TABLEWARE_CATEGORIES.includes(old))$(id).value=old;}});}
+function editTableware(i){const p=tableware[i];showModal(`<h2>Редактирование посуды</h2><label>Наименование</label><input id="ewName" value="${esc(p.name)}"><label>Категория</label><select id="ewCat">${TABLEWARE_CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join('')}</select><label>Цена закупочная</label><input id="ewCost" type="number" step=".01" value="${p.cost}"><label>Цена продажная</label><input id="ewPrice" type="number" step=".01" value="${p.price}"><label>Остаток</label><input id="ewStock" type="number" step=".01" value="${p.stock}"><button class="btn primary" style="margin-top:10px;width:100%" onclick="saveTableware(${i})">Сохранить</button>`);$("ewCat").value=p.category||'Набор';}
+function saveTableware(i){const p=tableware[i];p.name=$("ewName").value.trim()||p.name;p.category=$("ewCat").value;p.cost=Number($("ewCost").value)||0;p.price=Number($("ewPrice").value)||0;p.stock=Number($("ewStock").value)||0;save();closeModal();draw();}
+function deleteTableware(i){if(confirm('Удалить «'+tableware[i].name+'»?')){tableware.splice(i,1);save();draw();}}
+function receiveProduct(){
+ let i=+$("receiveProduct").value,q=Number($("receiveQty").value)||0;
+ if(!q)return alert("Введите количество");
+ products[i].stock+=q;
+ if($("receiveCost").value!=="")products[i].cost=Number($("receiveCost").value)||products[i].cost;
+ save();alert("Товар принят");draw();
+}
+function addService(){const name=$('serviceName').value.trim();if(!name)return;services.push({name,type:$('serviceType').value,unit:$('serviceUnit').value,price:Number($('servicePrice').value)||0});save();$('serviceName').value='';$('servicePrice').value='';draw()}
+function editService(i){const s=services[i];showModal(`<h2>Редактирование услуги</h2><label>Название</label><input id="esName" value="${s.name.replace(/"/g,'&quot;')}"><label>Цена</label><input id="esPrice" type="number" step=".01" value="${s.price}"><label>Тип расчёта</label><select id="esType"><option>вес</option><option>смешанный</option><option>штуки</option><option>аренда</option><option>деньги</option></select><label>Единица</label><select id="esUnit"><option>гр</option><option>шт</option><option>час</option><option>руб</option></select><div class="modal-actions"><button class="btn primary" onclick="saveService(${i})">Сохранить</button><button class="btn" onclick="closeModal()">Отмена</button></div>`);$('esType').value=s.type;$('esUnit').value=s.unit}
+function saveService(i){const s=services[i];s.name=$('esName').value.trim()||s.name;s.price=Number($('esPrice').value)||0;s.type=$('esType').value;s.unit=$('esUnit').value;save();closeModal();draw()}
+function deleteService(i){if(confirm('Удалить услугу?')){services.splice(i,1);save();draw()}}
+function editSale(si){
+ const sale=sales[si]; if(!sale)return;
+ editingSaleIndex=si; editingSaleItems=JSON.parse(JSON.stringify(sale.items||[]));
+ renderSaleEditor();
+}
+function renderSaleEditor(){
+ const si=editingSaleIndex,items=editingSaleItems||[],sale=sales[si];
+ showModal(`<h2>Редактирование чека</h2><div class="muted">${new Date(sale.date).toLocaleString('ru-RU')}</div><div id="saleEditList">${items.map((x,i)=>`<div class="card"><b>${x.service}</b><br>${x.product||''}<div class="muted">${x.qty} ${x.unit} × ${x.price} ₽${x.kind==='mixed'?` + ${x.servicePrice} ₽ услуга`:''}</div><b>${x.total} ₽</b><div class="modal-actions"><button class="btn" onclick="editSaleItem(${i})">✏️ Изменить</button><button class="btn danger" onclick="removeSaleItem(${i})">Удалить</button></div></div>`).join('')||'<p class="muted">Чек пуст</p>'}</div><div class="total">Итого: ${money(items.reduce((a,x)=>a+x.total,0))} ₽</div><div class="modal-actions"><button class="btn primary" onclick="saveSaleEdit()">✓ Сохранить изменения</button><button class="btn" onclick="closeSaleEdit()">Отмена</button></div>`);
+}
+function editSaleItem(i){
+ const x=editingSaleItems[i]; if(!x)return;
+ if(x.kind==='mixed'||x.kind==='product'){
+  const opts=products.map((p,j)=>`<option value="${j}">${p.name} — ${p.price} ₽/г</option>`).join('');
+  showModal(`<h2>Изменить чай в чеке</h2><label>Чай</label><select id="esTea">${opts}</select><label>Граммы</label><input id="esQty" type="number" min="0.01" step="0.01" value="${x.qty}"><label>Скидка %</label><input id="esDisc" type="number" min="0" max="100" step=".01" value="${x.discount||0}"><label></label><input id="esStick" type="number" min="0" step="1" value="${x.stickers||0}"><div class="modal-actions"><button class="btn primary" onclick="saveSaleTea(${i})">Сохранить</button><button class="btn" onclick="renderSaleEditor()">Отмена</button></div>`); $('esTea').value=String(x.productIndex); return;
+ }
+ showModal(`<h2>Изменить позицию</h2><b>${x.service}${x.product?' — '+x.product:''}</b><label>Количество</label><input id="esQtySimple" type="number" min="0.01" step=".01" value="${x.qty}"><div class="modal-actions"><button class="btn primary" onclick="saveSaleSimple(${i})">Сохранить</button><button class="btn" onclick="renderSaleEditor()">Отмена</button></div>`);
+}
+function saveSaleTea(i){
+ const x=editingSaleItems[i],pi=Number($('esTea').value),p=products[pi],q=Number($('esQty').value)||0,d=Number($('esDisc').value)||0,st=Number($('esStick').value)||0;
+ if(!p||!q)return; const oldQty=(x.kind==='mixed'||x.kind==='product')?Number(x.qty):0; const available=p.stock+(x.productIndex===pi?oldQty:0); if(q>available)return alert('Недостаточно остатка: '+available+' г');
+ x.product=p.name;x.productIndex=pi;x.qty=q;x.price=p.price;x.discount=d;x.stickers=st;x.cost=money(p.cost*q);x.total=money(p.price*q*(1-d/100)+(x.kind==='mixed'?Number(x.servicePrice)||0:0));renderSaleEditor();
+}
+function saveSaleSimple(i){const x=editingSaleItems[i],q=Number($('esQtySimple').value)||0;if(!q)return;x.qty=q;x.total=money(x.price*q);renderSaleEditor()}
+function removeSaleItem(i){editingSaleItems.splice(i,1);renderSaleEditor()}
+function saveSaleEdit(){
+ const si=editingSaleIndex,old=sales[si],newItems=editingSaleItems||[],delta={};
+ for(const x of old.items||[])if(x.kind==='mixed'||x.kind==='product')delta[x.productIndex]=(delta[x.productIndex]||0)+Number(x.qty||0);
+ for(const x of newItems)if(x.kind==='mixed'||x.kind==='product')delta[x.productIndex]=(delta[x.productIndex]||0)-Number(x.qty||0);
+ for(const [k,d] of Object.entries(delta)){const p=products[Number(k)];if(!p)return alert('Товар из старого чека отсутствует в базе.');if(p.stock+d<0)return alert('Недостаточно остатка «'+p.name+'». После исправления останется '+money(p.stock+d)+' г.');}
+ for(const [k,d] of Object.entries(delta))products[Number(k)].stock=money(products[Number(k)].stock+d);
+ old.items=JSON.parse(JSON.stringify(newItems));old.total=money(newItems.reduce((a,x)=>a+x.total,0));old.editedAt=new Date().toISOString();save();closeModal();editingSaleIndex=null;editingSaleItems=null;draw();alert('Чек исправлен, склад обновлён.');
+}
+function drawReport(){
+ const now=new Date();
+ const sameDay=(iso,d)=>{const x=new Date(iso);return x.getFullYear()===d.getFullYear()&&x.getMonth()===d.getMonth()&&x.getDate()===d.getDate()};
+ const sameMonth=(iso,d)=>{const x=new Date(iso);return x.getFullYear()===d.getFullYear()&&x.getMonth()===d.getMonth()};
+ const prevMonthDate=new Date(now.getFullYear(),now.getMonth()-1,1);
+ const samePrevMonth=(iso)=>{const x=new Date(iso);return x.getFullYear()===prevMonthDate.getFullYear()&&x.getMonth()===prevMonthDate.getMonth()};
+
+ const allItems=sales.flatMap(s=>(s.items||[]).map(x=>({...x,saleDate:s.date})));
+ const revenue=money(allItems.reduce((a,x)=>a+Number(x.total||0),0));
+ const cost=money(allItems.reduce((a,x)=>a+Number(x.cost||0),0));
+ const profit=money(revenue-cost);
+ const todayRevenue=money(allItems.filter(x=>sameDay(x.saleDate,now)).reduce((a,x)=>a+Number(x.total||0),0));
+ const monthRevenue=money(allItems.filter(x=>sameMonth(x.saleDate,now)).reduce((a,x)=>a+Number(x.total||0),0));
+ const prevMonthRevenue=money(allItems.filter(x=>samePrevMonth(x.saleDate)).reduce((a,x)=>a+Number(x.total||0),0));
+ const todayProfit=money(allItems.filter(x=>sameDay(x.saleDate,now)).reduce((a,x)=>a+Number(x.total||0)-Number(x.cost||0),0));
+ const monthProfit=money(allItems.filter(x=>sameMonth(x.saleDate,now)).reduce((a,x)=>a+Number(x.total||0)-Number(x.cost||0),0));
+ const prevMonthProfit=money(allItems.filter(x=>samePrevMonth(x.saleDate)).reduce((a,x)=>a+Number(x.total||0)-Number(x.cost||0),0));
+
+ $("stats").innerHTML=`
+ <div class="stat">Всего выручка<b>${revenue} ₽</b></div>
+ <div class="stat">Сегодня<b>${todayRevenue} ₽</b></div>
+ <div class="stat">Текущий месяц<b>${monthRevenue} ₽</b></div>
+ <div class="stat">Прошлый месяц<b>${prevMonthRevenue} ₽</b></div>
+ <div class="stat">Себестоимость<b>${cost} ₽</b></div>
+ <div class="stat">Прибыль<b>${profit} ₽</b></div>
+ <div class="stat">Прибыль сегодня<b>${todayProfit} ₽</b></div>
+ <div class="stat">Прибыль за месяц<b>${monthProfit} ₽</b></div>`;
+
+ let rows=[];
+ sales.forEach((s,si)=> (s.items||[]).forEach(x=>{
+   const gross=Number(x.total||0)+Number(x.discountRub||0);
+   const discRub=Number(x.discountRub||0);
+   const itemProfit=money(Number(x.total||0)-Number(x.cost||0));
+   rows.push(`<tr>
+    <td>${new Date(s.date).toLocaleDateString('ru-RU')}</td>
+    <td>${x.service||''}</td>
+    <td>${x.product||''}</td>
+    <td>${money(x.qty||0)} ${x.unit||''}</td>
+    <td>${money(x.total||0)} ₽</td>
+    <td>${money(x.cost||0)} ₽</td>
+    <td>${itemProfit} ₽</td>
+    <td>${x.discount||0}%</td>
+    <td>${discRub} ₽</td>
+   </tr>`);
+ }));
+ $("reportTable").innerHTML=
+ '<tr><th>Дата</th><th>Услуга</th><th>Товар</th><th>Вес (гр) / Шт</th><th>Выручка</th><th>Себестоимость</th><th>Прибыль</th><th>Скидка %</th><th>Скидка руб</th></tr>'+
+ rows.join('')+
+ '<tr><td colspan="9" class="muted">Прибыль = выручка − себестоимость. Себестоимость берётся из Базы товаров.</td></tr>';
+}
+function clearReport(){if(confirm('Удалить всю историю продаж?')){sales=[];save();draw()}}
+function drawReference(){
+ const st=$('serviceTable');
+ if(st) st.innerHTML='<tr><th>Услуга</th><th>Тип</th><th>Единица</th><th>Цена</th><th>Действия</th></tr>'+services.map((x,i)=>`<tr><td>${x.name}</td><td>${x.type}</td><td>${x.unit}</td><td>${money(x.price)} ₽</td><td><button class="btn" onclick="editService(${i})">✏️ Редактировать</button> <button class="btn danger" onclick="deleteService(${i})">🗑️</button></td></tr>`).join('');
+ const ct=$('coffeeTable');
+ if(ct) ct.innerHTML='<tr><th>Кофе</th><th>Цена</th></tr>'+coffee.map(x=>`<tr><td>${x.name}</td><td>${money(x.price)} ₽</td></tr>`).join('');
+ const vt=$('vipTable');
+ if(vt) vt.innerHTML='<tr><th>VIP</th><th>Цена</th></tr>'+vip.map(x=>`<tr><td>${x.name}</td><td>${money(x.price)} ₽/${x.unit}</td></tr>`).join('');
+}
+function closeSaleEdit(){editingSaleIndex=null;editingSaleItems=null;closeModal();}
+
+function draw(){fillSelects();fillTablewareCategorySelects();drawServices();renderCheck();drawBase();drawReference();drawReport()}
+
+
+const COFFEE_PRICES = {"Эспрессо":100,"2х эспрессо":150,"Американо":150,"Капучино":180,"Латте":180,"Флэт Уайт":250,"Бамбл":250,"Эспрессо тоник":250,"Айс латте":250,"Сиропы":25,"Альтернативное молоко":45};
+
+const COCKTAILS = ["Южная маракуйя","Фейхоа цитрус","Манговый заряд","Вишневый драйв","Вишня мята","Клубничный мохито","Лаймовый мохито","Огуречный фреш","Сладкая жвачка","Жвачка на драйве"];
+const COCKTAIL_PRICES = {"0.3":150,"0.5":250};
+const MAIN_MENU = {
+  "Кофе":["Эспрессо","2х эспрессо","Американо","Капучино","Латте","Флэт Уайт","Бамбл","Эспрессо тоник","Айс латте","Сиропы","Альтернативное молоко"],
+  "Коктейли":COCKTAILS,"VIP+PS5":[],"Чай россыпью":[],"Чаепитие":[],"Посуда":[],"Чайная церемония":[],"Подарочные наборы":[]
+};
+
+function addDirectItem(name,price){
+  if(!Array.isArray(window.checkItems)){
+    window.checkItems = [];
+  }
+  window.checkItems.push({service:name, product:name, qty:1, unit:"шт", price:Number(price)||0, total:Number(price)||0, kind:"service"});
+  if(typeof renderCheck==="function") renderCheck();
+  if(typeof save==="function") save();
+  if(typeof closeModal==="function") closeModal();
+}
+function renderMainMenu(){
+ const host=$("mainMenu"); if(!host)return; host.classList.remove("hidden");
+}
+function openMainCategory(i){
+ const names=Object.keys(MAIN_MENU),name=names[i],items=MAIN_MENU[name],main=$("mainMenu"),cat=$("categoryMenu"); main.classList.add("hidden"); cat.classList.remove("hidden");
+ if(!items.length){cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>${name}</h2></div><p class="muted">Подпункты этого раздела добавим следующим шагом.</p>`;return;}
+ cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>☕ ${name}</h2></div><div class="tiles">${items.map((item,j)=>{let c=coffee.find(x=>x.name===item);return `<button class="tile" onclick="chooseMainItem(${i},${j})"><b>${item}</b>${c?`<small>${c.price} ₽</small>`:''}</button>`}).join('')}</div>`;
+}
+function backToMainMenu(){$("categoryMenu").classList.add("hidden");$("categoryMenu").innerHTML='';$("mainMenu").classList.remove("hidden");}
+function chooseMainItem(ci,ii){
+ const names=Object.keys(MAIN_MENU),category=names[ci],item=MAIN_MENU[category][ii];
+ if(category==='Коктейли'){ showCocktailVolume(item); return; }
+ if(category==='Кофе'){const idx=coffee.findIndex(c=>c.name===item); if(idx>=0){addCoffee(idx);return;} alert('Для «'+item+'» пока не задана цена в справочнике.');return;}
+ const si=services.findIndex(s=>s.name===item); if(si>=0){addServiceLine(si);return;}
+ showModal(`<h2>${item}</h2><p class="muted">${category}</p><p>Этот раздел пока не заполнен.</p><button class="btn" onclick="closeModal()">Закрыть</button>`);
+}
+
+function showCocktailVolume(name){
+ showModal(`<h2>🍹 ${name}</h2><p class="muted">Выберите объём:</p><div class="tiles">
+ <button class="tile" onclick="addCocktailToCheck('${name.replace(/'/g,"\'")}','0.3')"><b>0,3 л</b><small>150 ₽</small></button>
+ <button class="tile" onclick="addCocktailToCheck('${name.replace(/'/g,"\'")}','0.5')"><b>0,5 л</b><small>250 ₽</small></button>
+ </div><div class="modal-actions"><button class="btn" onclick="closeModal()">Отмена</button></div>`);
+}
+
+function addCocktailToCheck(name,volume){
+ const price=COCKTAIL_PRICES[volume];
+ if(!price)return;
+ check.push({kind:'cocktail',service:'Коктейли',product:name,volume,qty:1,unit:'шт',price,total:price,cost:0,stickers:0,discount:0});
+ closeModal();
+ renderCheck();
+ showToast('🍹 Добавлено в чек', `${name} · ${volume.replace('.',',')} л · <b>${price} ₽</b>`);
+}
+
+/* STABLE RECEIVE + SALES MENU PATCH v1 */
+const STABLE_COFFEE_PRICES = {
+  "Эспрессо":100,
+  "2х эспрессо":150,
+  "Американо":150,
+  "Капучино":180,
+  "Латте":180,
+  "Флэт Уайт":250,
+  "Бамбл":250,
+  "Эспрессо тоник":250,
+  "Айс латте":250,
+  "Сиропы":25,
+  "Альтернативное молоко":45
+};
+
+function applyStableCoffeePrices(){
+  coffee = coffee.filter(c => c.name !== "Дополнительно");
+  Object.entries(STABLE_COFFEE_PRICES).forEach(([name, price]) => {
+    const item = coffee.find(c => c.name === name);
+    if(item) item.price = price;
+    else coffee.push({name, unit:"шт", price});
+  });
+  coffee = coffee.filter(c => Object.prototype.hasOwnProperty.call(STABLE_COFFEE_PRICES, c.name));
+  localStorage.chaiExcelCoffee = JSON.stringify(coffee);
+}
+
+function showReceiveType(type){
+  $("receiveTeaPanel").classList.toggle("hidden", type !== "tea");
+  $("receiveCoffeePanel").classList.toggle("hidden", type !== "coffee");
+  $("receiveWarePanel").classList.toggle("hidden", type !== "ware");
+  if(type==='ware') fillTablewareCategorySelects();
+}
+
+function createTeaFromReceive(){
+  const name = $("receiveTeaName").value.trim();
+  const qty = Number($("receiveTeaQty").value);
+  const cost = Number($("receiveTeaCost").value);
+  const price = Number($("receiveTeaPrice").value);
+
+  if(!name) return alert("Введите название чая");
+  if(!Number.isFinite(qty) || qty <= 0) return alert("Введите количество грамм");
+  if(!Number.isFinite(cost) || cost < 0) return alert("Введите себестоимость за грамм");
+  if(!Number.isFinite(price) || price < 0) return alert("Введите цену продажи за грамм");
+
+  // Ищем чай именно среди весовых позиций. Если он уже есть —
+  // увеличиваем остаток и обновляем цены. Если нет — создаём новую позицию.
+  let p = products.find(x => x.unit === "гр" && String(x.name).trim().toLowerCase() === name.toLowerCase());
+  const isNew = !p;
+
+  if(isNew){
+    p = {name, price, stock: money(qty), cost, stickers:0, unit:"гр"};
+    products.push(p);
+  } else {
+    p.stock = money(Number(p.stock || 0) + qty);
+    p.cost = cost;
+    p.price = price;
+  }
+
+  // Сначала сохраняем именно обновлённый массив товаров.
+  save();
+  localStorage.setItem("chaiExcelProducts", JSON.stringify(products));
+
+  // Сбрасываем форму после успешной приёмки.
+  $("receiveTeaName").value = "";
+  $("receiveTeaQty").value = "";
+  $("receiveTeaCost").value = "";
+  $("receiveTeaPrice").value = "";
+
+  // Перерисовываем Базу, селекторы и продажи — новый чай появляется сразу.
+  fillSelects();
+  draw();
+
+  showToast(isNew ? "🍵 Чай добавлен" : "🍵 Чай обновлён",
+    `Название: <b>${p.name}</b><br>` +
+    `Принято: <b>${money(qty)} г</b><br>` +
+    `Цена закупки: <b>${money(cost)} ₽/г</b><br>` +
+    `Цена продажи: <b>${money(price)} ₽/г</b><br>` +
+    `Остаток: <b>${money(p.stock)} г</b><br>` +
+    `Позиция автоматически добавлена в «База» и «Продажи → Чай россыпью».`);
+}
+
+function createWareFromReceive(){const name=$("receiveWareName").value.trim(),category=$("receiveWareCategory").value,qty=Number($("receiveWareQty").value),cost=Number($("receiveWareCost").value),price=Number($("receiveWarePrice").value);if(!name)return alert('Введите название посуды');if(!Number.isFinite(qty)||qty<=0)return alert('Введите количество');if(!Number.isFinite(cost)||cost<0)return alert('Введите цену закупки');if(!Number.isFinite(price)||price<0)return alert('Введите цену продажи');let p=tableware.find(x=>x.name.toLowerCase()===name.toLowerCase()&&x.category===category);const isNew=!p;if(p){p.stock=money(Number(p.stock||0)+qty);p.cost=cost;p.price=price;}else{p={name,category,price,stock:qty,cost,unit:'шт'};tableware.push(p);}save();draw();["receiveWareName","receiveWareQty","receiveWareCost","receiveWarePrice"].forEach(id=>$(id).value='');showToast(isNew?'🏺 Посуда добавлена':'🏺 Посуда обновлена',`«${p.name}» · ${p.category} · принято <b>${money(qty)} шт.</b> · остаток <b>${money(p.stock)} шт.</b>`);}
+
+function createCoffeeFromReceive(){
+  const name = $("receiveCoffeeName").value.trim();
+  const qty = Number($("receiveCoffeeQty").value);
+  const cost = Number($("receiveCoffeeCost").value);
+  const price = Number($("receiveCoffeePrice").value);
+  if(!name) return alert("Введите название кофе");
+  if(!Number.isFinite(qty) || qty <= 0) return alert("Введите количество");
+  if(!Number.isFinite(cost) || cost < 0) return alert("Введите себестоимость");
+  if(!Number.isFinite(price) || price < 0) return alert("Введите цену продажи");
+
+  let p = coffee.find(x => x.name.trim().toLowerCase() === name.toLowerCase());
+  const isNew = !p;
+  if(p){
+    p.stock = money(Number(p.stock || 0) + qty);
+    p.cost = cost;
+    p.price = price;
+  } else {
+    p = {name, price, stock:qty, cost, stickers:0, unit:"шт"};
+    coffee.push(p);
+  }
+  save(); fillSelects(); draw();
+  $("receiveCoffeeName").value = "";
+  $("receiveCoffeeQty").value = "";
+  $("receiveCoffeeCost").value = "";
+  $("receiveCoffeePrice").value = "";
+  showToast(isNew ? "☕ Кофе добавлен" : "☕ Кофе обновлён",
+    `«${p.name}» — принято ${money(qty)} шт.; закупка ${money(cost)} ₽/шт.; продажа ${money(price)} ₽/шт. Остаток: <b>${money(p.stock)} шт.</b>.`);
+}
+
+/* VIP+PS5 MENU v008 */
+function renderVipMenu(){
+  const cat=$('categoryMenu');
+  cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>🎮 VIP+PS5</h2></div>
+    <div class="tiles">
+      <button class="tile" onclick="showPS5Hours()"><b>🎮 Просто PS5</b><small>500 ₽ / час</small></button>
+      <button class="tile" onclick="showVipTeaList()"><b>🍵 Чай</b><small>Выбор чая из Базы · цена за грамм</small></button>
+    </div>`;
+}
+function showPS5Hours(){
+  showModal(`<h2>🎮 Просто PS5</h2>
+    <div class="hint"><b>500 ₽ / час</b></div>
+    <label>Количество часов</label>
+    <input id="ps5Hours" type="number" min="0.5" step="0.5" value="1">
+    <div class="modal-actions">
+      <button class="btn primary" onclick="addPS5ToCheck()">Добавить в чек</button>
+      <button class="btn" onclick="renderVipMenu();closeModal();">← Назад</button>
+    </div>`);
+}
+function addPS5ToCheck(){
+  const qty=Number($('ps5Hours').value)||0;
+  if(qty<=0)return alert('Укажите количество часов');
+  const price=500,total=money(price*qty);
+  check.push({kind:'vip',service:'VIP+PS5',product:'Просто PS5',qty,unit:'час',price,total,cost:0,stickers:0,discount:0});
+  closeModal();renderCheck();
+  showToast('🎮 Добавлено в чек',`Просто PS5 · <b>${qty} ч.</b> · 500 ₽/час · итого <b>${total} ₽</b>`);
+}
+function showVipTeaList(){
+  showModal(`<h2>🍵 Чай в VIP</h2>
+    <label>Поиск чая</label>
+    <input id="vipTeaSearch" type="search" placeholder="Введите название чая…" oninput="filterVipTeaSearch()">
+    <div id="vipTeaResults" class="tiles" style="margin-top:10px"></div>
+    <div class="modal-actions"><button class="btn" onclick="renderVipMenu();closeModal();">← Назад</button></div>`);
+  renderVipTeaResults();
+}
+function renderVipTeaResults(){
+  const box=$('vipTeaResults'); if(!box)return;
+  const q=String($('vipTeaSearch')?.value||'').trim().toLowerCase();
+  if(!q){ box.innerHTML='<p class="muted">🔎 Начните вводить название чая — появятся подходящие позиции.</p>'; return; }
+  const teas=products.map((p,i)=>({p,i})).filter(x=>x.p.unit==='гр' && x.p.name.toLowerCase().includes(q));
+  box.innerHTML=teas.length?teas.map(x=>`<button class="tile" onclick="showVipTeaAmount(${x.i})"><b>${esc(x.p.name)}</b><small>${money(x.p.price)} ₽/г · остаток ${money(x.p.stock)} г</small></button>`).join(''):`<p class="muted">Ничего не найдено.</p>`;
+}
+function filterVipTeaSearch(){renderVipTeaResults();}
+function showVipTeaAmount(productIndex){
+  const p=products[productIndex]; if(!p)return;
+  showModal(`<h2>🍵 Чай в VIP</h2>
+    <div class="hint"><b>${esc(p.name)}</b><br>${money(p.price)} ₽/г · остаток ${money(p.stock)} г</div>
+    <label>Граммы</label><input id="vipTeaQty" type="number" min="0.01" step="0.01" value="10">
+    <div class="modal-actions"><button class="btn primary" onclick="addVipTeaToCheck(${productIndex})">Добавить в чек</button><button class="btn" onclick="showVipTeaList()">← Другой чай</button></div>`);
+}
+function addVipTeaToCheck(productIndex){
+  const p=products[productIndex],qty=Number($('vipTeaQty').value)||0;
+  if(!p||qty<=0)return alert('Укажите граммы');
+  if(p.stock<qty)return alert('Недостаточно остатка: '+p.stock+' г');
+  const total=money(p.price*qty);
+  check.push({kind:'product',service:'VIP+PS5 — Чай',product:p.name,productIndex,qty,unit:'гр',price:p.price,total,cost:money(p.cost*qty),stickers:0,discount:0,discountRub:0});
+  closeModal();renderCheck();
+  showToast('🍵 Чай добавлен в чек',`VIP+PS5 · <b>${esc(p.name)}</b> · ${money(qty)} г · ${money(p.price)} ₽/г · итого <b>${total} ₽</b>`);
+}
+
+/* Replace the sales category renderer so Tea Rosсыпью reads directly from Base. */
+function openMainCategory(i){
+  const names = Object.keys(MAIN_MENU);
+  const name = names[i];
+  const main = $("mainMenu");
+  const cat = $("categoryMenu");
+
+  main.classList.add("hidden");
+  cat.classList.remove("hidden");
+
+  if(name === "VIP+PS5"){ renderVipMenu(); return; }
+
+  if(name === "Коктейли"){
+    cat.innerHTML = `<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>🍹 Коктейли</h2></div><div class="tiles">${COCKTAILS.map((item,j)=>`<button class="tile" onclick="chooseMainItem(${i},${j})"><b>${item}</b><small>0,3 л — 150 ₽ · 0,5 л — 250 ₽</small></button>`).join('')}</div>`;
+    return;
+  }
+
+  if(name === "Посуда"){
+    cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>🏺 Посуда</h2></div><div class="tiles">${TABLEWARE_CATEGORIES.map(c=>`<button class="tile" onclick="openTablewareCategory('${c}')"><b>${c}</b><small>${tableware.filter(x=>x.category===c).length} позиций</small></button>`).join('')}</div>`; return;
+  }
+
+  if(name === "Чай россыпью"){
+    cat.innerHTML = `<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>🍵 Чай россыпью</h2></div>
+      <label>Поиск чая</label>
+      <input id="looseTeaSearch" type="search" placeholder="Введите название чая…" oninput="renderLooseTeaResults()">
+      <div id="looseTeaResults" class="tiles" style="margin-top:10px"></div>`;
+    renderLooseTeaResults();
+    return;
+  }
+
+  const items = MAIN_MENU[name] || [];
+  if(!items.length){
+    cat.innerHTML = `<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>${name}</h2></div><p class="muted">Подпункты этого раздела добавим позже.</p>`;
+    return;
+  }
+
+  cat.innerHTML =
+    `<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>☕ ${name}</h2></div>` +
+    `<div class="tiles">${items.map((item,j) => {
+      const c = coffee.find(x => x.name === item);
+      return `<button class="tile" onclick="chooseMainItem(${i},${j})"><b>${item}</b><small>${STABLE_COFFEE_PRICES[item] || (c ? c.price : 0)} ₽</small></button>`;
+    }).join("")}</div>`;
+}
+
+function openTablewareCategory(category){const items=tableware.map((p,i)=>({p,i})).filter(x=>x.p.category===category);const cat=$("categoryMenu");cat.innerHTML=`<div class="category-head"><button class="btn" onclick="openMainCategory(5)">← К посуде</button><h2>🏺 ${category}</h2></div>`+(items.length?`<div class="tiles">${items.map(x=>`<button class="tile" onclick="chooseTableware(${x.i})"><b>${esc(x.p.name)}</b><small>${money(x.p.price)} ₽/шт · остаток ${money(x.p.stock)} шт</small></button>`).join('')}</div>`:`<p class="muted">В этой категории пока нет товаров.</p>`);}
+function chooseTableware(i){const p=tableware[i];if(!p)return;showModal(`<h2>🏺 ${esc(p.name)}</h2><div class="hint">${money(p.price)} ₽/шт · остаток ${money(p.stock)} шт</div><label>Количество</label><input id="wareSaleQty" type="number" min="1" step="1" value="1"><div class="modal-actions"><button class="btn primary" onclick="addTablewareToCheck(${i})">Добавить в чек</button><button class="btn" onclick="closeModal()">Отмена</button></div>`);}
+function addTablewareToCheck(i){const p=tableware[i],q=Math.max(1,Number($("wareSaleQty").value)||0);if(!p||q<=0)return;if(p.stock<q)return alert('Недостаточно остатка');const total=money(p.price*q);check.push({kind:'tableware',service:'Посуда',product:p.name,productIndex:i,qty:q,unit:'шт',price:p.price,total,cost:money(p.cost*q),discount:0,discountRub:0});closeModal();renderCheck();showToast('🏺 Добавлено в чек',`${p.name} · <b>${q} шт.</b> · ${money(p.price)} ₽/шт · итого <b>${total} ₽</b>`);}
+
+function renderLooseTeaResults(){
+  const box=$('looseTeaResults'); if(!box)return;
+  const q=String($('looseTeaSearch')?.value||'').trim().toLowerCase();
+  if(!q){ box.innerHTML='<p class="muted">🔎 Начните вводить название чая — появятся подходящие позиции.</p>'; return; }
+  const teas=products.map((p,i)=>({p,i})).filter(x=>x.p.unit==='гр' && x.p.name.toLowerCase().includes(q));
+  box.innerHTML=teas.length?teas.map(x=>`<button class="tile" onclick="chooseLooseTea(${x.i})"><b>${esc(x.p.name)}</b><small>${money(x.p.price)} ₽/г · остаток ${money(x.p.stock)} г</small></button>`).join(''):`<p class="muted">Ничего не найдено.</p>`;
+}
+function chooseLooseTea(productIndex){
+  const p=products[productIndex]; if(!p)return;
+  showModal(`<h2>🍵 ${esc(p.name)}</h2><div class="hint">${money(p.price)} ₽/г<br>Остаток: ${money(p.stock)} г</div>
+    <label>Количество грамм</label><input id="looseTeaQty" type="number" min="0.01" step="0.01" value="10">
+    <div class="modal-actions"><button class="btn primary" onclick="addLooseTeaToCheck(${productIndex})">Добавить в чек</button><button class="btn" onclick="closeModal();renderLooseTeaResults()">Отмена</button></div>`);
+}
+function addLooseTeaToCheck(productIndex){
+  const p=products[productIndex],qty=Number($('looseTeaQty').value)||0;
+  if(!p||qty<=0)return alert('Укажите граммы');
+  if(p.stock<qty)return alert('Недостаточно остатка: '+money(p.stock)+' г');
+  const total=money(p.price*qty);
+  check.push({kind:'product',service:'Чай россыпью',product:p.name,productIndex,qty,unit:'гр',price:p.price,total,cost:money(p.cost*qty),stickers:0,discount:0,discountRub:0});
+  closeModal();renderCheck();
+  showToast('🍵 Чай добавлен в чек',`<b>${esc(p.name)}</b> · ${money(qty)} г · ${money(p.price)} ₽/г · итого <b>${total} ₽</b>`);
+}
+
+applyStableCoffeePrices();
+renderMainMenu();
+draw();
+
+renderMainMenu();
+draw();
+</script>
+
+<script>
+/* TEA PARTY v010 */
+function getLooseTeasForParty(){
+  return products.filter(p => p && p.unit === "гр" && String(p.name || "").trim());
+}
+
+function openTeaPartyMenu(){
+  const main = $("mainMenu"), cat = $("categoryMenu");
+  main.classList.add("hidden");
+  cat.classList.remove("hidden");
+  cat.innerHTML = `
+    <div class="category-head">
+      <button class="btn" onclick="backToMainMenu()">← Назад</button>
+      <h2>🍵 Чаепитие</h2>
+    </div>
+    <div class="tiles">
+      <button class="tile" onclick="openBarTeaParty()"><b>🍵 Чай за барной стойкой</b><small>200 ₽ с человека</small></button>
+      <button class="tile" onclick="openTeaPartyPlaceholder('Стакан проливом')"><b>🥤 Стакан проливом</b></button>
+      <button class="tile" onclick="openTeaPartyPlaceholder('Чайник чая')"><b>🫖 Чайник чая</b></button>
+      <button class="tile" onclick="openTeaPartyPlaceholder('Варка чая')"><b>🔥 Варка чая</b></button>
+    </div>`;
+}
+
+function openTeaPartyPlaceholder(name){
+  showTopToast("Раздел открыт", `«${name}» — настройки этого пункта добавим следующим этапом.`);
+}
+
+function openBarTeaParty(){
+  const teas = getLooseTeasForParty();
+  showModal(`
+    <h2>🍵 Чай за барной стойкой</h2>
+    <p class="muted">200 ₽ с человека</p>
+    <label>Количество человек</label>
+    <input id="barTeaPeople" type="number" min="1" step="1" value="1">
+    <label>Поиск чая</label>
+    <input id="barTeaSearch" type="search" placeholder="Начните вводить название чая…" oninput="filterBarTeaSelect()">
+    <label>Какой чай пьём</label>
+    <select id="barTeaSelect">
+      ${teas.map((p,i)=>`<option value="${i}">${escapeHtml(p.name)} — ${p.price} ₽/г</option>`).join("")}
+    </select>
+    ${teas.length ? "" : `<p class="muted">В Базе пока нет чая.</p>`}
+    <div class="modal-actions">
+      <button class="btn primary" ${teas.length ? "" : "disabled"} onclick="addBarTeaPartyToCheck()">Добавить в чек</button>
+      <button class="btn" onclick="closeModal()">Отмена</button>
+    </div>
+  `);
+}
+
+function filterBarTeaSelect(){
+  const input = $("barTeaSearch");
+  const select = $("barTeaSelect");
+  if(!input || !select) return;
+  const q = input.value.trim().toLowerCase();
+  const teas = getLooseTeasForParty();
+  const selectedName = select.options[select.selectedIndex]?.dataset?.name || select.options[select.selectedIndex]?.textContent?.split(" — ")[0];
+  const filtered = teas.filter(p => p.name.toLowerCase().includes(q));
+  select.innerHTML = filtered.map((p,i)=>`<option value="${getLooseTeasForParty().indexOf(p)}" data-name="${escapeHtml(p.name)}">${escapeHtml(p.name)} — ${p.price} ₽/г</option>`).join("");
+  if(selectedName){
+    const opt = [...select.options].find(o => o.dataset.name === selectedName);
+    if(opt) opt.selected = true;
+  }
+}
+
+function addBarTeaPartyToCheck(){
+  const people = Number($("barTeaPeople").value);
+  const select = $("barTeaSelect");
+  const productIndex = Number(select.value);
+  const tea = products[productIndex];
+
+  if(!Number.isFinite(people) || people < 1) return alert("Укажите количество человек.");
+  if(!tea) return alert("Выберите чай.");
+
+  const total = people * 200;
+  check.push({
+    kind:"service",
+    service:"Чай за барной стойкой",
+    product:tea.name,
+    qty:people,
+    unit:"чел.",
+    price:200,
+    total,
+    cost:0,
+    discount:0,
+    discountRub:0,
+    teaName:tea.name
+  });
+
+  if(typeof renderCheck === "function") renderCheck();
+  if(typeof save === "function") save();
+  closeModal();
+
+  showTopToast(
+    "🍵 Чай за барной стойкой добавлен в чек",
+    `Чай: <b>${escapeHtml(tea.name)}</b> · ${people} чел. · 200 ₽/чел. · Итого <b>${total} ₽</b>`
+  );
+}
+
+if(typeof escapeHtml !== "function"){
+  window.escapeHtml = function(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  };
+}
+
+/* Hook only the "Чаепитие" main category. */
+const _openMainCategory010 = openMainCategory;
+openMainCategory = function(i){
+  const names = Object.keys(MAIN_MENU);
+  if(names[i] === "Чаепитие"){
+    openTeaPartyMenu();
+    return;
+  }
+  return _openMainCategory010(i);
+};
+</script>
+
+
+<script>
+/* ЧАЕПИТИЕ v022 — поиск чая как в «Чай россыпью» и VIP */
+(function(){
+  const TEA_SERVICES=[
+    {kind:'teaBar',name:'Чай за барной стойкой',price:200,people:true,limit:null,showTea:true},
+    {kind:'teaPour',name:'Стакан проливом',price:150,people:false,limit:10,showTea:false},
+    {kind:'teaPourPremium',name:'Стакан проливом премиум',price:300,people:false,limit:null,showTea:true},
+    {kind:'teaPot',name:'Чайник чая',price:250,people:false,limit:null,showTea:true},
+    {kind:'teaBrewLuyu',name:'По Лу Юю',price:700,people:false,limit:null,showTea:true},
+    {kind:'teaBrewEnergy',name:'Пуэр на энергетике',price:600,people:false,limit:null,showTea:false},
+    {kind:'teaBrewPomegranate',name:'Дянь Хун на гранатовом соке',price:600,people:false,limit:null,showTea:true},
+    {kind:'teaBrewCherry',name:'Пуэр на вишневом соке',price:500,people:false,limit:null,showTea:false}
+  ];
+  const esc=s=>typeof escapeHtml==='function'?escapeHtml(s):String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function teas(limit=null){
+    let a=products.map((p,i)=>({p,i})).filter(x=>x.p&&x.p.unit==='гр'&&String(x.p.name||'').trim()&&Number(x.p.stock)>0);
+    if(limit!==null)a=a.filter(x=>Number(x.p.price)<=limit);
+    return a;
+  }
+  function serviceByKind(k){return TEA_SERVICES.find(x=>x.kind===k)||TEA_SERVICES[0];}
+  function searchHtml(kind, searchId, resultsId, limit){
+    return `<label>Поиск чая</label>
+      <input id="${searchId}" type="search" placeholder="Введите название чая…" oninput="filterTeaPartySearch022('${kind}')">
+      <div id="${resultsId}" class="tiles" style="margin-top:10px"></div>`;
+  }
+  function renderResults(kind){
+    const s=serviceByKind(kind), box=$('tpResults022'); if(!box)return;
+    const q=String($('tpSearch022')?.value||'').trim().toLowerCase();
+    if(!q){box.innerHTML='<p class="muted">🔎 Начните вводить название чая — появятся подходящие позиции.</p>';return;}
+    const list=teas(s.limit).filter(x=>x.p.name.toLowerCase().includes(q));
+    box.innerHTML=list.length?list.map(x=>`<button class="tile" onclick="chooseTeaPartyTea022('${kind}',${x.i})"><b>${esc(x.p.name)}</b><small>${money(x.p.price)} ₽/г · остаток ${money(x.p.stock)} г</small></button>`).join(''):'<p class="muted">Ничего не найдено.</p>';
+  }
+  window.filterTeaPartySearch022=function(kind){renderResults(kind)};
+  window.openTeaPartyMenu=function(){
+    const main=$('mainMenu'),cat=$('categoryMenu');main.classList.add('hidden');cat.classList.remove('hidden');
+    cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>🍵 Чаепитие</h2></div><div class="tiles">
+      ${TEA_SERVICES.slice(0,4).map(s=>`<button class="tile" onclick="openTeaService022('${s.kind}')"><b>${s.kind==='teaBar'?'🍵':s.kind.startsWith('teaPour')?'🥤':'🫖'} ${esc(s.name)}</b><small>${s.price} ₽${s.people?' с человека':''}</small></button>`).join('')}
+      <button class="tile" onclick="openBrewMenu022()"><b>🔥 Варка чая</b><small>4 варианта</small></button>
+    </div>`;
+  };
+  window.openTeaService022=function(kind){
+    const s=serviceByKind(kind);
+    if(!teas(s.limit).length){showModal(`<h2>${esc(s.name)}</h2><p class="muted">Подходящего чая в Базе пока нет.</p><button class="btn" onclick="closeModal()">Закрыть</button>`);return;}
+    showModal(`<h2>${s.people?'🍵':'🥤'} ${esc(s.name)}</h2>
+      <div class="hint"><b>${s.price} ₽${s.people?' с человека':''}</b>${s.limit!==null?`<br>Только чай с ценой продажи до ${s.limit} ₽/г.`:''}</div>
+      ${s.people?`<label>Количество человек</label><input id="tpPeople022" type="number" min="1" step="1" value="1">`:''}
+      ${searchHtml(kind,'tpSearch022','tpResults022',s.limit)}
+      <div class="modal-actions"><button class="btn" onclick="closeModal()">Отмена</button></div>`);
+    renderResults(kind);
+  };
+  window.chooseTeaPartyTea022=function(kind,idx){
+    const s=serviceByKind(kind),p=products[idx]; if(!p)return;
+    const people=s.people?Math.max(1,Number($('tpPeople022')?.value)||1):1;
+    showModal(`<h2>${s.people?'🍵':'🥤'} ${esc(s.name)}</h2>
+      <div class="hint"><b>${esc(p.name)}</b><br>${money(p.price)} ₽/г · остаток ${money(p.stock)} г<br>${s.price} ₽${s.people?' с человека':''}</div>
+      ${s.people?`<label>Количество человек</label><input id="tpPeople022" type="number" min="1" step="1" value="${people}">`:''}
+      <label>Количество грамм</label><input id="tpGrams022" type="number" min="0.01" step="0.01" value="10">
+      <div class="modal-actions"><button class="btn primary" onclick="addTeaService022('${kind}',${idx})">Добавить в чек</button><button class="btn" onclick="openTeaService022('${kind}')">← Другой чай</button></div>`);
+  };
+  function teaInCheck(kind){return ['teaBar','teaPot','teaBrewLuyu','teaBrewPomegranate'].includes(kind)}
+  function teaTotal(s,p,g,people){return money(Number(s.price||0)*(s.people?people:1)+(teaInCheck(s.kind)?Number(p.price||0)*g:0))}
+  function toastFor(s,p,g,people,total){
+    const teaValue=money(Number(p.price||0)*g),serviceValue=money(Number(s.price||0)*(s.people?people:1));
+    const detail=teaInCheck(s.kind)?`услуга <b>${serviceValue} ₽</b> + чай <b>${teaValue} ₽</b>`:`в чек <b>${serviceValue} ₽</b> · чай списан из базы`;
+    showToast('🍵 Добавлено в чек',`<b>${esc(s.name)}</b> · ${esc(p.name)} · <b>${money(g)} г</b>${s.people?` · <b>${people} чел.</b>`:''} · ${detail} · итого <b>${money(total)} ₽</b>`);
+  }
+  window.addTeaService022=function(kind,idx){
+    const s=serviceByKind(kind),p=products[idx],g=Number($('tpGrams022')?.value)||0,people=s.people?Math.max(1,Number($('tpPeople022')?.value)||1):1;
+    if(!p)return alert('Выберите чай'); if(g<=0)return alert('Укажите количество грамм');
+    if(p.stock<g)return alert('Недостаточно остатка: '+p.name+' — '+money(p.stock)+' г');
+    const teaValue=money(Number(p.price||0)*g),serviceValue=money(Number(s.price||0)*people),total=teaTotal(s,p,g,people);
+    p.stock=money(Number(p.stock)-g);
+    check.push({kind:s.kind,editType:s.kind,service:s.name,product:p.name,productIndex:idx,qty:g,teaGrams:g,unit:'гр',people,price:s.price,total,cost:money(Number(p.cost||0)*g),stickers:0,discount:0,discountRub:0,stockReserved:true,showTeaInCheck:s.showTea,teaInCheck:teaInCheck(kind),teaUnitPrice:Number(p.price||0),teaValue,serviceValue});
+    save();closeModal();renderCheck();toastFor(s,p,g,people,total);
+  };
+  window.openBrewMenu022=function(){showModal(`<h2>🔥 Варка чая</h2><div class="tiles">${TEA_SERVICES.slice(4).map(s=>`<button class="tile" onclick="openTeaService022('${s.kind}')"><b>${esc(s.name)}</b><small>${s.price} ₽</small></button>`).join('')}</div><div class="modal-actions"><button class="btn" onclick="closeModal()">Отмена</button></div>`) };
+  const oldOpen=window.openMainCategory;window.openMainCategory=function(i){const names=Object.keys(MAIN_MENU);if(names[i]==='Чаепитие'){openTeaPartyMenu();return;}return oldOpen(i)};
+  window.removeCheckItem022=function(i){const x=check[i];if(!x)return;if(x.stockReserved&&x.productIndex!=null&&products[x.productIndex])products[x.productIndex].stock=money(Number(products[x.productIndex].stock)+Number(x.teaGrams||0));check.splice(i,1);save();renderCheck()};
+  window.clearCheck022=function(){for(const x of check){if(x.stockReserved&&x.productIndex!=null&&products[x.productIndex])products[x.productIndex].stock=money(Number(products[x.productIndex].stock)+Number(x.teaGrams||0));}check=[];save();renderCheck()};
+  const oldRender=window.renderCheck;
+  window.renderCheck=function(){
+    $('check').innerHTML=check.length?check.map((x,i)=>{
+      const tea=['teaBar','teaPour','teaPourPremium','teaPot','teaBrewLuyu','teaBrewEnergy','teaBrewPomegranate','teaBrewCherry'].includes(x.kind);
+      let desc='';
+      if(tea){
+        const inCheck=x.teaInCheck===true || teaInCheck(x.editType||x.kind);
+        const teaValue=money(Number(x.teaUnitPrice||0)*Number(x.teaGrams||0));
+        const serviceValue=money(Number(x.price||0)*(x.kind==='teaBar'?Number(x.people||1):1));
+        desc=inCheck?`чай: ${esc(x.product)} · ${money(x.teaGrams)} г${x.kind==='teaBar'?` · ${x.people} чел.`:''} · услуга ${serviceValue} ₽ + чай ${teaValue} ₽`:`${serviceValue} ₽ · чай списан: ${esc(x.product)} · ${money(x.teaGrams)} г`;
+      } else if(x.kind==='cocktail')desc=`${x.volume.replace('.',',')} л · ${x.price} ₽`;
+      else if(x.kind==='mixed')desc=`${x.qty} ${x.unit} × ${x.price} ₽ + ${x.servicePrice} ₽ услуга`;
+      else desc=`${x.qty||1} ${x.unit||'шт'} × ${x.price||0} ₽`;
+      return `<div class="cartrow"><div><b>${esc(x.service||'')}</b><br>${x.product&&!tea?esc(x.product):''}<div class="muted">${desc}</div></div><div><b>${money(x.total)} ₽</b><br><button class="btn" onclick="editCurrentItem(${i})">✏️</button> <button class="btn danger" onclick="removeCheckItem022(${i})">×</button></div></div>`;
+    }).join(''):`<div class='muted'>Чек пуст</div>`;
+    $('total').textContent=money(check.reduce((a,x)=>a+Number(x.total||0),0));
+  };
+  const oldSell=window.sell;window.sell=function(){
+    if(!check.length)return alert('Чек пуст');
+    for(const x of check){
+      if(x.kind==='tableware'){const p=tableware[x.productIndex];if(!p||Number(p.stock)<Number(x.qty))return alert('Недостаточно остатка: '+(p?p.name:'посуда'));}
+      else if(x.kind==='product'||x.kind==='mixed'){const p=products[x.productIndex];if(!p||Number(p.stock)<Number(x.qty))return alert('Недостаточно остатка: '+(p?p.name:'чай'));}
+    }
+    for(const x of check){
+      if(x.kind==='tableware'){tableware[x.productIndex].stock=money(Number(tableware[x.productIndex].stock)-Number(x.qty));}
+      else if(x.kind==='product'||x.kind==='mixed'){const p=products[x.productIndex];p.stock=money(Number(p.stock)-Number(x.qty));p.stickers=Math.max(0,(p.stickers||0)-Number(x.stickers||0));}
+    }
+    const total=money(check.reduce((a,x)=>a+Number(x.total||0),0));sales.unshift({date:new Date().toISOString(),items:JSON.parse(JSON.stringify(check)),total});save();alert('Продажа проведена на '+total+' ₽');check=[];draw();
+  };
+})();
+</script>
+
+
+<script>
+/* ЧАЙНАЯ ЦЕРЕМОНИЯ v018 */
+(function(){
+  const CEREMONIES=[
+    {kind:'ceremonyPinCha',name:'Пин ча',price:2000},
+    {kind:'ceremonyTeaPath',name:'Становления на чайный путь',price:2000}
+  ];
+  const esc=s=>typeof escapeHtml==='function'?escapeHtml(s):String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const teaList=()=>products.map((p,i)=>({p,i})).filter(x=>x.p&&x.p.unit==='гр'&&String(x.p.name||'').trim()&&Number(x.p.stock)>0);
+  const options=(q='')=>{
+    q=String(q||'').trim().toLowerCase();
+    return teaList().filter(x=>!q||x.p.name.toLowerCase().includes(q)).map(x=>`<option value="${x.i}">${esc(x.p.name)} — ${money(x.p.price)} ₽/г · остаток ${money(x.p.stock)} г</option>`).join('');
+  };
+  function refresh(row){
+    const inp=$(`cerTeaSearch018_${row}`), sel=$(`cerTea018_${row}`); if(!sel)return;
+    const old=sel.value; sel.innerHTML=options(inp?inp.value:'');
+    if([...sel.options].some(o=>o.value===old)) sel.value=old;
+  }
+  window.openCeremonyMenu018=function(){
+    const main=$('mainMenu'),cat=$('categoryMenu');
+    main.classList.add('hidden');cat.classList.remove('hidden');
+    cat.innerHTML=`<div class="category-head"><button class="btn" onclick="backToMainMenu()">← Назад</button><h2>🏮 Чайная церемония</h2></div><div class="tiles">${CEREMONIES.map((c,i)=>`<button class="tile" onclick="openCeremony018(${i})"><b>🏮 ${esc(c.name)}</b><small>2000 ₽ · следующий гость +1000 ₽</small></button>`).join('')}</div>`;
+  };
+  window.openCeremony018=function(ci){
+    const c=CEREMONIES[ci];
+    showModal(`<h2>🏮 ${esc(c.name)}</h2>
+      <div class="hint"><b>2000 ₽</b> — первый человек · каждый следующий <b>+1000 ₽</b></div>
+      <label>Дополнительные гости</label><input id="cerGuests018" type="number" min="0" step="1" value="0">
+      <div class="hint">Выбрано людей: <b id="cerPeoplePreview018">1</b> · Итого: <b id="cerTotalPreview018">2000 ₽</b></div>
+      ${[1,2,3].map(r=>`<div class="card" style="margin-top:10px;padding:10px"><b>🍵 Чай ${r}</b>
+        <label>Поиск чая</label><input id="cerTeaSearch018_${r}" type="search" placeholder="Введите название…" oninput="filterCerTea018(${r})">
+        <label>Чай</label><select id="cerTea018_${r}">${options()}</select>
+        <label>Количество грамм</label><input id="cerGram018_${r}" type="number" min="0" step="0.01" value="0">
+      </div>`).join('')}
+      <div class="modal-actions"><button class="btn primary" onclick="addCeremony018(${ci})">Добавить в чек</button><button class="btn" onclick="closeModal()">Отмена</button></div>`);
+    const g=$('cerGuests018'); if(g)g.oninput=()=>{const n=Math.max(0,Math.floor(Number(g.value)||0));$('cerPeoplePreview018').textContent=1+n;$('cerTotalPreview018').textContent=money(2000+n*1000)+' ₽';};
+  };
+  window.filterCerTea018=function(row){refresh(row)};
+  function topNotice(c,guestCount,teas,total){
+    const teaText=teas.length?teas.map(t=>`${esc(t.name)} · <b>${money(t.grams)} г</b>`).join(' · '):'чай не выбран';
+    const msg=`${esc(c.name)} · ${guestCount} чел. · ${teaText} · в чек <b>${money(total)} ₽</b> · чай списан из базы, стоимость чая не добавлена`;
+    if(typeof showToast==='function') showToast('🏮 Церемония добавлена в чек',msg);
+    else if(typeof showTopToast==='function') showTopToast('🏮 Церемония добавлена в чек',msg);
+  }
+  window.addCeremony018=function(ci){
+    const c=CEREMONIES[ci];
+    const extra=Math.max(0,Math.floor(Number($('cerGuests018').value)||0));
+    const people=1+extra,total=2000+extra*1000;
+    const teas=[];
+    for(let r=1;r<=3;r++){
+      const grams=Number($(`cerGram018_${r}`).value)||0;
+      const idx=Number($(`cerTea018_${r}`).value);
+      if(grams>0){const tea=products[idx];if(!tea)return alert(`Выберите чай №${r}`);if(Number(tea.stock)<grams)return alert(`Недостаточно остатка: ${tea.name} — ${money(tea.stock)} г`);teas.push({productIndex:idx,name:tea.name,grams});}
+    }
+    if(!teas.length)return alert('Выберите хотя бы один чай и укажите граммы');
+    teas.forEach(t=>{products[t.productIndex].stock=money(Number(products[t.productIndex].stock)-t.grams)});
+    check.push({kind:'ceremony',editType:'ceremony',service:c.name,product:'',qty:1,unit:'услуга',price:total,total,cost:0,discount:0,discountRub:0,people,extraGuests:extra,ceremonyTeas:teas,stockReserved:true,teaInCheck:false});
+    save();closeModal();renderCheck();topNotice(c,people,teas,total);
+  };
+
+  // Церемонии открываются из главного меню.
+  const oldOpen=window.openMainCategory;
+  window.openMainCategory=function(i){
+    const names=Object.keys(MAIN_MENU);
+    if(names[i]==='Чайная церемония'){openCeremonyMenu018();return;}
+    return oldOpen(i);
+  };
+
+  // Возврат нескольких чаёв в остаток при удалении позиции/очистке чека.
+  const oldRemove=window.removeCheckItem015;
+  window.removeCheckItem015=function(i){
+    const x=check[i];
+    if(x&&x.kind==='ceremony'&&Array.isArray(x.ceremonyTeas)){
+      x.ceremonyTeas.forEach(t=>{if(products[t.productIndex])products[t.productIndex].stock=money(Number(products[t.productIndex].stock)+Number(t.grams||0));});
+      check.splice(i,1);save();renderCheck();return;
+    }
+    if(typeof oldRemove==='function')return oldRemove(i);
+    check.splice(i,1);save();renderCheck();
+  };
+  const oldClear=window.clearCheck015;
+  window.clearCheck015=function(){
+    for(const x of check){if(x&&x.kind==='ceremony'&&Array.isArray(x.ceremonyTeas))x.ceremonyTeas.forEach(t=>{if(products[t.productIndex])products[t.productIndex].stock=money(Number(products[t.productIndex].stock)+Number(t.grams||0));});}
+    if(typeof oldClear==='function')return oldClear();
+    check=[];save();renderCheck();
+  };
+
+  // Дополняем отрисовку чека строкой с гостями и выбранными чаями.
+  const oldRender=window.renderCheck;
+  window.renderCheck=function(){
+    if(typeof oldRender==='function')oldRender();
+    document.querySelectorAll('.cartrow').forEach((row,i)=>{
+      const x=check[i]; if(!x||x.kind!=='ceremony')return;
+      const teas=(x.ceremonyTeas||[]).map(t=>`${esc(t.name)} · ${money(t.grams)} г`).join('<br>');
+      const muted=row.querySelector('.muted');
+      if(muted)muted.innerHTML=`${x.people||1} чел. · ${money(x.total)} ₽<br>${teas}<br><span class="muted">Стоимость чая в чек не входит</span>`;
+    });
+  };
+})();
+</script>
+
+</body>
+</html>
