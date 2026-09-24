@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>🐒 Чайная Лавочка — касса 019</title>
+<title>🐒 Чайная Лавочка — касса 020</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f3eee7;color:#2d2722;font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
@@ -67,7 +67,7 @@ th{background:#eee7dd}
 .toast{position:fixed;left:50%;top:20px;transform:translateX(-50%);z-index:9999;background:#332721;color:#fff;padding:14px 18px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.25);max-width:calc(100% - 32px);width:max-content;font-size:15px;line-height:1.4}.toast b{color:#e5b75c}</style>
 </head>
 <body>
-<header>🐒 Чайная <span>Лавочка</span> — касса 019</header>
+<header>🐒 Чайная <span>Лавочка</span> — касса 020</header>
 
 <nav>
 <button class="active" onclick="tab('sales',this)">🧾 Продажи</button>
@@ -230,6 +230,17 @@ th{background:#eee7dd}
 <script>
 const $=id=>document.getElementById(id);
 const money=x=>Math.round((Number(x)||0)*100)/100;
+function showToast(title,html){
+  let t=document.getElementById("globalToast");
+  if(!t){
+    t=document.createElement("div"); t.id="globalToast"; t.className="toast";
+    document.body.appendChild(t);
+  }
+  t.innerHTML=`<b>${title}</b><br>${html}`;
+  t.style.display="block";
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer=setTimeout(()=>{t.style.display="none"},3200);
+}
 function loadJSON(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(e){return fallback}}
 
 const defaultProducts=[
@@ -328,24 +339,27 @@ function addTeaWithService(serviceIndex,productIndex){
  if(!qty)return alert("Укажи граммы");
  if(p.stock<qty)return alert("Недостаточно остатка: "+p.name+" — "+p.stock+" г");
  const teaTotal=money(p.price*qty*(1-disc/100));
- check.push({kind:"mixed",service:s.name,product:p.name,productIndex,qty,unit:"гр",price:p.price,servicePrice:s.price,total:money(s.price+teaTotal),cost:money(p.cost*qty),stickers:0,discount:disc,discountRub:money(p.price*qty*disc/100)});
+ const total=money(s.price+teaTotal);
+ check.push({kind:"mixed",service:s.name,product:p.name,productIndex,qty,unit:"гр",price:p.price,servicePrice:s.price,total,cost:money(p.cost*qty),stickers:0,discount:disc,discountRub:money(p.price*qty*disc/100)});
  closeModal();renderCheck();
+ showToast('🍵 Чай добавлен в чек',`${esc(p.name)} · <b>${qty} г</b> · услуга ${money(s.price)} ₽ · чай ${money(teaTotal)} ₽ · итого <b>${total} ₽</b>`);
 }
 function addCoffee(i){
  const c=coffee[i];
  check.push({kind:"coffee",service:"Кофе",product:c.name,qty:1,unit:c.unit,price:c.price,total:money(c.price),cost:0,stickers:0,discount:0});
  renderCheck();
+ showToast('☕ Добавлено в чек',`${esc(c.name)} · <b>${money(c.price)} ₽</b>`);
 }
 function addVip(i){
  const v=vip[i];
  showModal(`<h2>${v.name}</h2><label>Количество часов</label><input id="modalQty" type="number" min="0.01" step="0.01" value="1"><div class="modal-actions"><button class="btn primary" onclick="saveVipModal(${i})">Добавить</button><button class="btn" onclick="closeModal()">Отмена</button></div>`);
 }
-function saveVipModal(i){const v=vip[i],qty=Number($("modalQty").value)||0;if(!qty)return;check.push({kind:"vip",service:"Вип комната",product:v.name,qty,unit:v.unit,price:v.price,total:money(v.price*qty),cost:0,stickers:0,discount:0});closeModal();renderCheck()}
+function saveVipModal(i){const v=vip[i],qty=Number($("modalQty").value)||0;if(!qty)return;const total=money(v.price*qty);check.push({kind:"vip",service:"Вип комната",product:v.name,qty,unit:v.unit,price:v.price,total,cost:0,stickers:0,discount:0});closeModal();renderCheck();showToast('🎮 Добавлено в чек',`${esc(v.name)} · <b>${qty} ${v.unit}</b> · ${money(v.price)} ₽/${v.unit} · итого <b>${total} ₽</b>`)}
 function addProductLine(){
  const i=+$('productSelect').value,p=products[i],qty=Number($('productQty').value),disc=Number($('productDiscount').value)||0,stick=Number($('productStickers').value)||0;
  if(!qty)return alert('Введите количество'); if(p.stock<qty)return alert('Недостаточно товара на складе. Остаток: '+p.stock+' '+p.unit);
  let gross=p.price*qty,total=money(gross*(1-disc/100));
- check.push({kind:'product',service:'Чай россыпью',product:p.name,productIndex:i,qty,unit:p.unit,price:p.price,total,cost:money(p.cost*qty),stickers:0,discount:disc,discountRub:money(p.price*qty*disc/100)}); renderCheck();
+ check.push({kind:'product',service:'Чай россыпью',product:p.name,productIndex:i,qty,unit:p.unit,price:p.price,total,cost:money(p.cost*qty),stickers:0,discount:disc,discountRub:money(p.price*qty*disc/100)}); renderCheck(); showToast('🍵 Чай добавлен в чек',`${esc(p.name)} · <b>${qty} г</b> · ${money(p.price)} ₽/г · итого <b>${total} ₽</b>`);
 }
 function quickTea(i){$('productSelect').value=i;$('productQty').value=10;addProductLine()}
 function editCurrentItem(i){
@@ -755,7 +769,8 @@ function showVipTeaList(){
 function renderVipTeaResults(){
   const box=$('vipTeaResults'); if(!box)return;
   const q=String($('vipTeaSearch')?.value||'').trim().toLowerCase();
-  const teas=products.map((p,i)=>({p,i})).filter(x=>x.p.unit==='гр' && (!q||x.p.name.toLowerCase().includes(q)));
+  if(!q){ box.innerHTML='<p class="muted">🔎 Начните вводить название чая — появятся подходящие позиции.</p>'; return; }
+  const teas=products.map((p,i)=>({p,i})).filter(x=>x.p.unit==='гр' && x.p.name.toLowerCase().includes(q));
   box.innerHTML=teas.length?teas.map(x=>`<button class="tile" onclick="showVipTeaAmount(${x.i})"><b>${esc(x.p.name)}</b><small>${money(x.p.price)} ₽/г · остаток ${money(x.p.stock)} г</small></button>`).join(''):`<p class="muted">Ничего не найдено.</p>`;
 }
 function filterVipTeaSearch(){renderVipTeaResults();}
@@ -827,7 +842,8 @@ function addTablewareToCheck(i){const p=tableware[i],q=Math.max(1,Number($("ware
 function renderLooseTeaResults(){
   const box=$('looseTeaResults'); if(!box)return;
   const q=String($('looseTeaSearch')?.value||'').trim().toLowerCase();
-  const teas=products.map((p,i)=>({p,i})).filter(x=>x.p.unit==='гр' && (!q||x.p.name.toLowerCase().includes(q)));
+  if(!q){ box.innerHTML='<p class="muted">🔎 Начните вводить название чая — появятся подходящие позиции.</p>'; return; }
+  const teas=products.map((p,i)=>({p,i})).filter(x=>x.p.unit==='гр' && x.p.name.toLowerCase().includes(q));
   box.innerHTML=teas.length?teas.map(x=>`<button class="tile" onclick="chooseLooseTea(${x.i})"><b>${esc(x.p.name)}</b><small>${money(x.p.price)} ₽/г · остаток ${money(x.p.stock)} г</small></button>`).join(''):`<p class="muted">Ничего не найдено.</p>`;
 }
 function chooseLooseTea(productIndex){
