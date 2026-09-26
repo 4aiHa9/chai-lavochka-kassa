@@ -124,21 +124,15 @@ th{background:#eee7dd}
 </div>
 <div id="baseTeaSection" class="card">
 <h2>🍵 База чая</h2>
-<div class="row2"><div><label>🔎 Поиск по названию</label><input id="baseTeaSearch" type="search" oninput="drawBase()" placeholder="Введите название чая…"></div><div style="display:flex;align-items:end"><button class="btn primary" style="width:100%" onclick="showNewProduct('tea')">＋ Новый чай</button></div></div>
+<div><label>🔎 Поиск по названию</label><input id="baseTeaSearch" type="search" oninput="drawBase()" placeholder="Введите название чая…"></div>
 <div class="scroll" style="margin-top:10px"><table id="baseTeaTable"></table></div>
 </div>
 <div id="baseWareSection" class="card hidden">
 <h2>🏺 База посуды</h2>
-<div class="row2"><div><label>🔎 Поиск по названию</label><input id="baseWareSearch" type="search" oninput="drawBase()" placeholder="Введите название товара…"></div><div style="display:flex;align-items:end"><button class="btn primary" style="width:100%" onclick="showNewProduct('ware')">＋ Новая посуда</button></div></div>
+<div><label>🔎 Поиск по названию</label><input id="baseWareSearch" type="search" oninput="drawBase()" placeholder="Введите название товара…"></div>
 <div class="scroll" style="margin-top:10px"><table id="baseWareTable"></table></div>
 </div>
-<div id="newProduct" class="card hidden">
-<h2 id="newProductTitle">Новый товар</h2><input id="newKind" type="hidden" value="tea">
-<div class="row2"><div><label>Наименование</label><input id="newName"></div><div><label>Единица</label><select id="newUnit"><option value="гр">гр</option><option value="шт">шт</option></select></div></div>
-<div id="newWareCategoryWrap" class="hidden"><label>Категория посуды</label><select id="newWareCategory"></select></div>
-<div class="row3"><div><label>Цена продажи за гр/шт (руб)</label><input id="newPrice" type="number" step=".01"></div><div><label>В наличии</label><input id="newStock" type="number" step=".01"></div><div><label>Цена закупки за гр/шт</label><input id="newCost" type="number" step=".01"></div></div>
-<button class="btn primary" style="margin-top:10px" onclick="createProduct()">Сохранить</button><button class="btn" style="margin-top:8px" onclick="$('newProduct').classList.add('hidden')">Отмена</button>
-</div>
+
 </section>
 
 
@@ -1338,9 +1332,8 @@ openMainCategory = function(i){
       if(ware) ware.insertAdjacentHTML('afterend',`
         <div id="baseGiftSection" class="card hidden">
           <h2>🎁 Расходники на подарки</h2>
-          <div class="row2">
-            <div><label>🔎 Поиск по названию</label><input id="baseGiftSearch" type="search" oninput="drawBase()" placeholder="Введите название расходника…"></div>
-            <div style="display:flex;align-items:end"><button class="btn primary" style="width:100%" onclick="showNewGiftSupply()">＋ Новый расходник</button></div>
+          <div>
+            <label>🔎 Поиск по названию</label><input id="baseGiftSearch" type="search" oninput="drawBase()" placeholder="Введите название расходника…">
           </div>
           <div class="scroll" style="margin-top:10px"><table id="baseGiftTable"></table></div>
         </div>`);
@@ -1603,9 +1596,8 @@ openMainCategory = function(i){
     if(!$('baseCoffeeSection')){
       base.insertAdjacentHTML('beforeend',`<div id="baseCoffeeSection" class="card hidden">
         <h2>☕ База кофе</h2>
-        <div class="row2">
-          <div><label>🔎 Поиск по названию</label><input id="baseCoffeeSearch" type="search" oninput="drawBase()" placeholder="Введите название кофе…"></div>
-          <div style="display:flex;align-items:end"><button class="btn primary" style="width:100%" onclick="showNewWarehouseCoffee()">＋ Новый кофе</button></div>
+        <div>
+          <label>🔎 Поиск по названию</label><input id="baseCoffeeSearch" type="search" oninput="drawBase()" placeholder="Введите название кофе…">
         </div>
         <div id="coffeeWarehouseSummary" class="hint" style="margin-top:10px"></div>
         <div class="scroll" style="margin-top:10px"><table id="baseCoffeeTable"></table></div>
@@ -1615,9 +1607,8 @@ openMainCategory = function(i){
     if(!$('baseSuppliesSection')){
       base.insertAdjacentHTML('beforeend',`<div id="baseSuppliesSection" class="card hidden">
         <h2>📦 Расходники</h2>
-        <div class="row2">
-          <div><label>🔎 Поиск по названию</label><input id="baseSuppliesSearch" type="search" oninput="drawBase()" placeholder="Введите название расходника…"></div>
-          <div style="display:flex;align-items:end"><button class="btn primary" style="width:100%" onclick="showNewWarehouseSupply()">＋ Новый расходник</button></div>
+        <div>
+          <label>🔎 Поиск по названию</label><input id="baseSuppliesSearch" type="search" oninput="drawBase()" placeholder="Введите название расходника…">
         </div>
         <div id="suppliesWarehouseSummary" class="hint" style="margin-top:10px"></div>
         <div class="scroll" style="margin-top:10px"><table id="baseSuppliesTable"></table></div>
@@ -2783,9 +2774,9 @@ try{
   const esc48=window.esc||function(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))};
   const money48=window.money||function(v){return Math.round((Number(v)||0)*100)/100};
 
-  document.title='index049.html';
+  document.title='index050.html';
   const hdr=document.querySelector('header');
-  if(hdr)hdr.innerHTML='🐒 Чайная <span>Лавочка</span> — касса 049';
+  if(hdr)hdr.innerHTML='🐒 Чайная <span>Лавочка</span> — касса 050';
 
   /* Всегда синхронизируем массив чеков с тем же localStorage-ключом,
      который используется при закрытии продажи. */
@@ -2907,7 +2898,7 @@ try{
 
 
 <script>
-/* index049 — единственное хранилище закрытых продаж: «Отчёты → Чеки».
+/* index050 — единственное хранилище закрытых продаж: «Отчёты → Чеки».
    Убираем «Отчёт о продажах» полностью из интерфейса.
    Продажа после нажатия «Продать» сохраняется в chaiExcelSales и отображается
    только в списке «Чеки». Редактирование/удаление существующей логики не меняется. */
@@ -2917,9 +2908,9 @@ try{
   const esc49=window.esc||function(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))};
   const money49=window.money||function(v){return Math.round((Number(v)||0)*100)/100};
 
-  document.title='index049.html';
+  document.title='index050.html';
   const hdr=document.querySelector('header');
-  if(hdr)hdr.innerHTML='🐒 Чайная <span>Лавочка</span> — касса 049';
+  if(hdr)hdr.innerHTML='🐒 Чайная <span>Лавочка</span> — касса 050';
 
   function syncSales49(){
     try{
@@ -3062,5 +3053,27 @@ try{
   };
 
   syncSales49();
+})();
+</script>
+
+<script>
+/* index050 — в Базе создание новых товаров отключено: добавление выполняется только через Приёмку. */
+(function(){
+  function removeBaseCreationUI(){
+    ['baseTeaSection','baseWareSection','baseCoffeeSection','baseSuppliesSection','baseGiftSection'].forEach(id=>{
+      const sec=document.getElementById(id);
+      if(!sec)return;
+      sec.querySelectorAll('button').forEach(btn=>{
+        const t=(btn.textContent||'').trim().toLowerCase();
+        const oc=btn.getAttribute('onclick')||'';
+        if(/нов(ый|ая|ое) (чай|посуда|кофе|расходник)|нов(ый|ая|ое) товар/.test(t) || /showNewProduct|showNewWarehouseCoffee|showNewWarehouseSupply|showNewGiftSupply/.test(oc)) btn.remove();
+      });
+    });
+    document.getElementById('newProduct')?.remove();
+  }
+  removeBaseCreationUI();
+  setTimeout(removeBaseCreationUI,0);
+  setTimeout(removeBaseCreationUI,100);
+  setTimeout(removeBaseCreationUI,500);
 })();
 </script>
