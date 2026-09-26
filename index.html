@@ -3079,7 +3079,7 @@ try{
 </script>
 
 <script>
-/* index052 — Приём товара непосредственно из всех разделов Базы.
+/* index053 — Приём товара непосредственно из всех разделов Базы.
    Новые товары по-прежнему создаются только через Приёмку. */
 (function(){
   'use strict';
@@ -3087,9 +3087,9 @@ try{
   const esc51=window.esc||function(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))};
   const money51=window.money||function(v){return Math.round((Number(v)||0)*100)/100};
 
-  document.title='index052.html';
+  document.title='index053.html';
   const hdr=document.querySelector('header');
-  if(hdr)hdr.innerHTML='🐒 Чайная <span>Лавочка</span> — касса 052';
+  if(hdr)hdr.innerHTML='🐒 Чайная <span>Лавочка</span> — касса 053';
 
   const labels={tea:'🍵 Чай',coffee:'☕ Кофе',ware:'🏺 Посуда',supplies:'📦 Расходники',gift:'🎁 Расходники на подарки'};
   const units={tea:'г',coffee:'г',ware:'шт',supplies:'шт',gift:'шт'};
@@ -3239,3 +3239,4 @@ try{
   setTimeout(()=>{if(typeof window.drawBase==='function')window.drawBase();},100);
 })();
 </script>
+\n<script>\n(function(){\nconst A=window; const M=A.money||((v)=>Math.round((Number(v)||0)*100)/100);\nfunction cat(x){const s=String((x?.category||'')+' '+(x?.service||'')+' '+(x?.product||'')+' '+(x?.name||'')).toLowerCase();if(/коктей|мохито|маракуй|фейхоа|манго|вишн|огуреч|жвач/.test(s))return'Коктейли';if(/ps5|vip/.test(s))return'VIP + PS5';if(/церем|пин ча|чайный путь/.test(s))return'Чайная церемония';if(/барной стой|пролив|чайник|варка чая|по лу юю|пуэр на энергет|гранатов|вишневом сок/.test(s))return'Чаепитие';if(/посуда|пиала|гайван|чабань|чахай|коврик|благовон|фигур/.test(s))return'Посуда';if(/букет|корзин|сертификат|коробк|набор/.test(s))return'Подарочные наборы';if(/кофе|эспрессо|американо|капучино|латте|флэт|бамбл|тоник/.test(s))return'Кофе';return'Чай'}\nfunction data(){const cs=['Чай','Кофе','Коктейли','VIP + PS5','Чаепитие','Посуда','Чайная церемония','Подарочные наборы'],b={};cs.forEach(c=>b[c]={s:0,c:0});let r=0,c=0;(A.sales||[]).forEach(s=>{r+=Number(s.total??s.grossTotal||0);c+=Number(s.cost||0);(s.items||[]).forEach(x=>{let k=cat(x),v=Number(x.total??x.price||0),z=Number(x.cost||0);b[k].s+=v;b[k].c+=z})});return{r,c,p:r-c,b}}\nfunction render(){let h=document.getElementById('overallReport053');if(!h)return;let d=data(), rows=Object.entries(d.b).map(([k,v])=>'<tr><td>'+k+'</td><td>'+M(v.s)+' ₽</td><td>'+M(v.c)+' ₽</td><td>'+M(v.s-v.c)+' ₽</td></tr>').join('');h.innerHTML='<div class="report-total-grid"><div class="report-total"><div>💰 Общая выручка</div><div class="v">'+M(d.r)+' ₽</div></div><div class="report-total"><div>📦 Общая закупка</div><div class="v">'+M(d.c)+' ₽</div></div><div class="report-total"><div>📈 Чистая прибыль</div><div class="v">'+M(d.p)+' ₽</div></div></div><div class="report-card"><h3>Финансовый результат по категориям</h3><table class="report-table"><thead><tr><th>Категория</th><th>Продажи</th><th>Закупка</th><th>Чистая прибыль</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="report-card"><h3>Сравнение прибыли по дням</h3><p>График использует сохранённые чеки и автоматически пересчитывается после изменений.</p></div>'}\nfunction setup(){let hub=document.getElementById('reportsHub039')||document.getElementById('reportsHub');if(!hub)return;let inv=document.getElementById('inventoryReport'),old=hub.querySelector('.report-tabs');if(!old){old=document.createElement('div');old.className='report-tabs';old.style='display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px';hub.insertBefore(old,hub.firstChild)}old.innerHTML='';[['sales','🧾 Чеки'],['receipt','📥 Отчёт приёмки'],['base','📦 Отчёт по базе'],['overall','📊 Общий отчёт']].forEach(([m,t])=>{let b=document.createElement('button');b.textContent=t;b.onclick=()=>{let r=document.getElementById('report'),q=document.getElementById('receiptReport'),o=document.getElementById('overallReport053');[r,q,inv,o].forEach(x=>x?.classList.add('hidden'));b.classList.add('primary');if(m==='sales'){r?.classList.remove('hidden');A.drawSalesReport035?.()}if(m==='receipt'){q?.classList.remove('hidden');A.renderReceiptReport033?.()}if(m==='base'){inv?.classList.remove('hidden');A.drawInventoryReport035?.()}if(m==='overall'){o?.classList.remove('hidden');render()}};old.appendChild(b)});let o=document.getElementById('overallReport053');if(!o){o=document.createElement('div');o.id='overallReport053';o.className='hidden';hub.appendChild(o)} }\nsetTimeout(setup,0);setTimeout(()=>{document.querySelectorAll('nav button').forEach(b=>{if((b.textContent||'').includes('Отч'))b.onclick=()=>{let h=document.getElementById('reportsHub039')||document.getElementById('reportsHub');document.querySelectorAll('main>section').forEach(x=>x.classList.add('hidden'));h?.classList.remove('hidden');}})},50);\n})();</script>\n
