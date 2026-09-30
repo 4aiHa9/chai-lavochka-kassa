@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐒 Чайная лавочка — каталог 001</title>
+<style>
+:root{
+  --bg:#f7f3ed;--card:#fff;--text:#24201c;--muted:#756b61;
+  --accent:#b8322c;--accent2:#8f241f;--line:#e7ded4;--dark:#211d19;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+.header{background:var(--dark);color:#fff;padding:18px 16px 22px;position:sticky;top:0;z-index:20}
+.header-inner{max-width:1100px;margin:auto}
+.brand{font-size:22px;font-weight:800}
+.slogan{font-size:12px;color:#cfc7bf;margin-top:4px}
+.search{margin-top:15px;width:100%;border:0;border-radius:14px;padding:13px 15px;background:#fff;color:#222;outline:none}
+.container{max-width:1100px;margin:auto;padding:18px 16px 100px}
+.hero{background:linear-gradient(135deg,#5a241f,#a63830);color:white;border-radius:22px;padding:25px;margin-bottom:18px;box-shadow:0 8px 25px #0001}
+.hero h1{margin:0 0 7px;font-size:29px}
+.hero p{margin:0;color:#f1deda;line-height:1.45}
+.categories{display:flex;gap:9px;overflow:auto;padding-bottom:8px;margin-bottom:18px}
+.categories button{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 15px;color:var(--text)}
+.categories button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:18px 0 12px}
+.section-title h2{font-size:21px;margin:0}
+.count{font-size:13px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 3px 12px #00000008}
+.photo{height:210px;background:#e9e1d7;display:flex;align-items:center;justify-content:center;color:#8a7d70;font-size:42px}
+.photo img{width:100%;height:100%;object-fit:cover}
+.card-body{padding:14px}
+.tag{display:inline-block;background:#f2e9df;border-radius:999px;padding:5px 8px;font-size:11px;color:#725f50;margin-bottom:8px}
+.card h3{margin:0 0 6px;font-size:17px}
+.desc{font-size:13px;line-height:1.4;color:var(--muted);min-height:36px}
+.price-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:13px}
+.price{font-weight:800;font-size:16px}
+.add{border:0;background:var(--accent);color:#fff;border-radius:11px;padding:9px 11px;font-weight:700}
+.add:hover{background:var(--accent2)}
+.empty{padding:35px 15px;text-align:center;color:var(--muted);grid-column:1/-1}
+.cart-fab{position:fixed;right:18px;bottom:18px;background:var(--accent);color:white;border:0;border-radius:18px;padding:14px 17px;box-shadow:0 8px 25px #0004;z-index:30;font-weight:800}
+.badge{background:#fff;color:var(--accent);border-radius:999px;padding:2px 7px;margin-left:5px}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:50}
+.modal.open{display:flex}
+.sheet{background:#fff;width:min(680px,100%);max-height:88vh;border-radius:24px 24px 0 0;padding:20px;overflow:auto}
+.sheet-head{display:flex;justify-content:space-between;align-items:center}
+.sheet h2{margin:0}
+.close{border:0;background:#eee;border-radius:50%;width:36px;height:36px}
+.cart-item{display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding:13px 0}
+.cart-thumb{width:58px;height:58px;border-radius:12px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden}
+.cart-thumb img{width:100%;height:100%;object-fit:cover}
+.cart-info{flex:1}
+.cart-name{font-weight:700}
+.cart-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.qty{display:flex;align-items:center;gap:7px}
+.qty button{border:0;background:#eee;border-radius:8px;width:30px;height:30px}
+.total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding:18px 0}
+.order-btn{width:100%;border:0;background:var(--dark);color:#fff;padding:14px;border-radius:13px;font-weight:800}
+.notice{font-size:12px;color:var(--muted);margin-top:9px;line-height:1.4}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.photo{height:180px}}
+@media(max-width:480px){.grid{gap:10px}.photo{height:150px}.card-body{padding:11px}.card h3{font-size:15px}.desc{font-size:12px}.price-row{align-items:flex-end;flex-direction:column}.add{width:100%}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">🐒 Чайная лавочка</div>
+    <div class="slogan">Чай с кем попало не пьют. Чай — это личное.</div>
+    <input id="search" class="search" placeholder="🔎 Найти чай, посуду или набор..." autocomplete="off">
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <h1>Каталог</h1>
+    <p>Знакомьтесь с нашими чаями, посудой и подарочными наборами. Выбирайте понравившееся и складывайте в корзину.</p>
+  </section>
+
+  <nav class="categories" id="categories"></nav>
+
+  <div class="section-title">
+    <h2 id="sectionTitle">Все товары</h2>
+    <span class="count" id="count"></span>
+  </div>
+
+  <section class="grid" id="products"></section>
+</main>
+
+<button class="cart-fab" onclick="openCart()">🛒 Корзина <span class="badge" id="cartCount">0</span></button>
+
+<div class="modal" id="cartModal" onclick="if(event.target===this)closeCart()">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h2>🛒 Ваша корзина</h2>
+      <button class="close" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="total"><span>Итого</span><span id="cartTotal">0 ₽</span></div>
+    <button class="order-btn" onclick="startOrder()">Оформить заказ</button>
+    <div class="notice">На этом этапе каталог работает без подключения к серверу. Заказ пока не отправляется — это мы подключим следующим этапом.</div>
+  </div>
+</div>
+
+<script>
+const products = [
+  {id:1,cat:"Чай",name:"Габа Изумрудная",price:900,unit:"50 г",emoji:"🍵",desc:"Новая позиция. Добавим подробное описание и фото из базы."},
+  {id:2,cat:"Чай",name:"Габа Сапфир",price:900,unit:"50 г",emoji:"🍵",desc:"Новая позиция. Фото и описание можно будет заполнить позже."},
+  {id:3,cat:"Чай",name:"Габа Рубин",price:900,unit:"50 г",emoji:"🍵",desc:"Новая позиция. Здесь будет карточка товара."},
+  {id:4,cat:"Чай",name:"Габа Аметист",price:900,unit:"50 г",emoji:"🍵",desc:"Новая позиция. Здесь будет карточка товара."},
+  {id:5,cat:"Чай",name:"Габа тайваньская MEI RIN",price:900,unit:"50 г",emoji:"🍵",desc:"Тайваньская габа. Цена сейчас примерная — изменим в базе."},
+  {id:6,cat:"Чай",name:"Пуэр ШУ «Синяя печать»",price:900,unit:"50 г",emoji:"🍵",desc:"Новый чай в ассортименте «Чайной лавочки»."},
+  {id:7,cat:"Чай",name:"Да Хун Пао",price:900,unit:"50 г",emoji:"🍵",desc:"Отборный улун. Можно добавить информацию о степени прожарки."},
+  {id:8,cat:"Чай",name:"Уэшаньский Ешэнь Хун Ча",price:700,unit:"50 г",emoji:"🍵",desc:"Красный чай. Можно добавить описание вкуса и аромата."},
+  {id:9,cat:"Посуда",name:"Гайвань",price:0,unit:"1 шт.",emoji:"🏺",desc:"Цена будет заполнена из базы посуды."},
+  {id:10,cat:"Посуда",name:"Пиала",price:0,unit:"1 шт.",emoji:"🏺",desc:"Цена будет заполнена из базы посуды."},
+  {id:11,cat:"Подарочные наборы",name:"Подарочный набор",price:0,unit:"1 набор",emoji:"🎁",desc:"Состав и цена будут управляться из базы."},
+  {id:12,cat:"Чайные наборы",name:"Набор для знакомства с чаем",price:0,unit:"1 набор",emoji:"🫖",desc:"Здесь будут твои готовые чайные наборы."}
+];
+
+let activeCat="Все";
+let cart=JSON.parse(localStorage.getItem("tea_catalog_cart_001")||"{}");
+
+function money(n){return new Intl.NumberFormat("ru-RU").format(n)+" ₽"}
+
+function saveCart(){
+  localStorage.setItem("tea_catalog_cart_001",JSON.stringify(cart));
+  updateCartCount();
+}
+
+function updateCartCount(){
+  document.getElementById("cartCount").textContent=Object.values(cart).reduce((a,b)=>a+b,0);
+}
+
+function renderCategories(){
+  const cats=["Все",...new Set(products.map(p=>p.cat))];
+  document.getElementById("categories").innerHTML=cats.map(c=>
+    `<button class="${c===activeCat?"active":""}" onclick="setCategory('${c.replaceAll("'","\\'")}')">${c}</button>`
+  ).join("");
+}
+
+function setCategory(cat){activeCat=cat;renderCategories();renderProducts()}
+
+function renderProducts(){
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  const list=products.filter(p=>(activeCat==="Все"||p.cat===activeCat)&&
+    (!q||(p.name+" "+p.cat+" "+p.desc).toLowerCase().includes(q)));
+  document.getElementById("sectionTitle").textContent=activeCat==="Все"?"Все товары":activeCat;
+  document.getElementById("count").textContent=list.length+" "+(list.length===1?"товар":"товаров");
+  document.getElementById("products").innerHTML=list.length?list.map(p=>`
+    <article class="card">
+      <div class="photo">${p.emoji}</div>
+      <div class="card-body">
+        <span class="tag">${p.cat}</span>
+        <h3>${p.name}</h3>
+        <div class="desc">${p.desc}</div>
+        <div class="price-row">
+          <span class="price">${p.price?money(p.price):"Цена уточняется"} <small>${p.price?"· "+p.unit:""}</small></span>
+          <button class="add" onclick="addToCart(${p.id})">В корзину</button>
+        </div>
+      </div>
+    </article>`).join(""):`<div class="empty">Ничего не найдено.<br>Попробуйте изменить поиск или категорию.</div>`;
+}
+
+function addToCart(id){
+  cart[id]=(cart[id]||0)+1;
+  saveCart();
+  openCart();
+}
+
+function openCart(){renderCart();document.getElementById("cartModal").classList.add("open")}
+function closeCart(){document.getElementById("cartModal").classList.remove("open")}
+
+function changeQty(id,delta){
+  cart[id]=(cart[id]||0)+delta;
+  if(cart[id]<=0)delete cart[id];
+  saveCart();renderCart();
+}
+
+function renderCart(){
+  const ids=Object.keys(cart);
+  const box=document.getElementById("cartItems");
+  if(!ids.length){box.innerHTML='<div class="empty">Корзина пока пустая 🫖</div>';document.getElementById("cartTotal").textContent="0 ₽";return}
+  let total=0;
+  box.innerHTML=ids.map(id=>{
+    const p=products.find(x=>x.id==id),qty=cart[id];
+    total+=p.price*qty;
+    return `<div class="cart-item">
+      <div class="cart-thumb">${p.emoji}</div>
+      <div class="cart-info"><div class="cart-name">${p.name}</div><div class="cart-sub">${p.price?money(p.price)+" · "+p.unit:"Цена уточняется"}</div></div>
+      <div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><b>${qty}</b><button onclick="changeQty(${p.id},1)">+</button></div>
+    </div>`;
+  }).join("");
+  document.getElementById("cartTotal").textContent=money(total);
+}
+
+function startOrder(){
+  alert("В первой версии корзина уже работает. На следующем этапе подключим оформление заказа и отправку тебе.");
+}
+
+document.getElementById("search").addEventListener("input",renderProducts);
+renderCategories();renderProducts();updateCartCount();
+</script>
+</body>
+</html>
