@@ -1,7 +1,7 @@
 {
   "name": "Чайная Лавка",
   "short_name": "Чайная Лавка",
-  "start_url": "./index123.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#241b18",
   "theme_color": "#241b18",
