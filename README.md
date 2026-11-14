@@ -1,1 +1,2 @@
-# chai-lavochka-kassa
+# chai-lavochka-kassa 
+актуальная версия
